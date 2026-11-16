@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Steel / BBS Calculator: Bar Weight & Stirrup Length (Free)</title><meta name="description" content="Free BBS calculator: steel bar weight by diameter (D²/162), total kg, and stirrup cutting length for beams and columns."><link rel="canonical" href="https://arbabalithebo92-web.github.io/bbs.html">
+<style>*{box-sizing:border-box}body{margin:0;background:#0f1b33;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+.w{max-width:620px;margin:0 auto;padding:22px 16px 40px}a{color:#f28c28}
+.tag{display:inline-block;background:#f28c28;color:#0f1b33;font-weight:800;font-size:13px;letter-spacing:1px;padding:4px 10px;border-radius:6px}
+h1{font-size:30px;line-height:1.15;margin:12px 0 6px}h1 span{color:#f28c28}h2{font-size:21px;margin:26px 0 10px}
+.sub{color:#b8c4da;margin:0 0 16px}.card{background:#18294b;border-radius:14px;padding:16px;margin-bottom:14px}
+label{display:block;font-weight:700;margin:10px 0 5px}input,select{width:100%;padding:11px;border-radius:10px;border:2px solid #3a4f7a;background:#0f1b33;color:#fff;font-size:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2a3c63}.row:last-child{border:0}.row b{color:#f28c28}
+.cta{display:block;text-align:center;background:#25D366;color:#06301a;font-weight:800;font-size:17px;padding:14px;border-radius:12px;text-decoration:none;margin-top:8px}
+.note{font-size:13px;color:#b8c4da}footer{text-align:center;color:#b8c4da;font-size:13px;margin-top:22px}</style></head><body><div class="w"><span class="tag">FREE TOOL</span><h1>Sariya / <span>BBS</span> calculator</h1><p class="sub">Sariye ka wazan aur stirrup (chhalla) ki cutting length.</p>
+<h2>1. Sariye ka wazan</h2><div class="card"><div class="g3"><div><label>Dia (mm)</label><select id="d"><option>8</option><option>10</option><option selected>12</option><option>16</option><option>20</option><option>25</option></select></div><div><label>Tadaad</label><input id="n" type="number" value="10" inputmode="numeric"></div><div><label>Lambai (m)</label><input id="L" type="number" value="12" inputmode="decimal"></div></div>
+<div class="row" style="margin-top:10px"><span>Wazan fi meter</span><b id="kgm"></b></div><div class="row"><span>Kul wazan</span><b id="kg"></b></div></div>
+<h2>2. Stirrup cutting length</h2><div class="card"><div class="g3"><div><label>Chaurai (mm)</label><input id="sb" type="number" value="230"></div><div><label>Gehrai (mm)</label><input id="sh" type="number" value="450"></div><div><label>Cover (mm)</label><input id="sc" type="number" value="25"></div></div>
+<label>Stirrup dia (mm)</label><select id="sd"><option selected>8</option><option>10</option></select>
+<div class="row" style="margin-top:10px"><span>Cutting length</span><b id="cl"></b></div><div class="row"><span>1 stirrup ka wazan</span><b id="sw"></b></div></div>
+<p class="note">Wazan = D² / 162 kg fi meter. Stirrup = 2(a + b) + 2 × 10d hooks − 3 × 2d bends, jahan a, b = section − 2 × cover. Laps aur wastage alag.</p>
+<a class="cta" href="https://wa.me/923445612046?text=Assalam%20o%20Alaikum%2C%20naqshe%20ka%20hisaab%20chahiye" target="_blank" rel="noopener">📲 Naqshe ka sahi hisaab: WhatsApp 0344-5612046</a>
+<p style="text-align:center;margin-top:14px"><a href="index.html">← Aur free tools</a></p>
+<footer><b style="color:#f28c28">Arbab Ali Thebo</b> · Senior Quantity Surveyor (17+ saal) · SMART QS AI</footer></div><script>function g(id){return +document.getElementById(id).value}function f(){var d=g('d'),w=d*d/162;document.getElementById('kgm').textContent=w.toFixed(3)+' kg/m';document.getElementById('kg').textContent=(w*g('n')*g('L')).toFixed(1)+' kg';
+var sd=g('sd'),a=g('sb')-2*g('sc'),b=g('sh')-2*g('sc'),cl=2*(a+b)+20*sd-6*sd;document.getElementById('cl').textContent=Math.round(cl)+' mm ('+(cl/1000).toFixed(2)+' m)';document.getElementById('sw').textContent=(cl/1000*sd*sd/162).toFixed(2)+' kg'}
+document.querySelectorAll('input,select').forEach(function(e){e.oninput=f});f();</script></body></html>
