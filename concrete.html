@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Concrete Calculator: Cement, Sand, Crush (Free)</title><meta name="description" content="Free concrete calculator: volume, cement bags, sand and crush for 1:2:4, 1:1.5:3 and 1:3:6 mix. Feet or metres."><link rel="canonical" href="https://arbabalithebo92-web.github.io/concrete.html">
+<style>*{box-sizing:border-box}body{margin:0;background:#0f1b33;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+.w{max-width:620px;margin:0 auto;padding:22px 16px 40px}a{color:#f28c28}
+.tag{display:inline-block;background:#f28c28;color:#0f1b33;font-weight:800;font-size:13px;letter-spacing:1px;padding:4px 10px;border-radius:6px}
+h1{font-size:30px;line-height:1.15;margin:12px 0 6px}h1 span{color:#f28c28}h2{font-size:21px;margin:26px 0 10px}
+.sub{color:#b8c4da;margin:0 0 16px}.card{background:#18294b;border-radius:14px;padding:16px;margin-bottom:14px}
+label{display:block;font-weight:700;margin:10px 0 5px}input,select{width:100%;padding:11px;border-radius:10px;border:2px solid #3a4f7a;background:#0f1b33;color:#fff;font-size:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2a3c63}.row:last-child{border:0}.row b{color:#f28c28}
+.cta{display:block;text-align:center;background:#25D366;color:#06301a;font-weight:800;font-size:17px;padding:14px;border-radius:12px;text-decoration:none;margin-top:8px}
+.note{font-size:13px;color:#b8c4da}footer{text-align:center;color:#b8c4da;font-size:13px;margin-top:22px}</style></head><body><div class="w"><span class="tag">FREE TOOL</span><h1>Concrete <span>calculator</span></h1><p class="sub">Slab, beam, column ya footing: volume aur cement, ret, bajri foran.</p>
+<div class="card"><label>Unit</label><select id="u"><option value="ft">Feet</option><option value="m">Metre</option></select>
+<div class="g3"><div><label>Lambai</label><input id="l" type="number" value="20" inputmode="decimal"></div><div><label>Chaurai</label><input id="b" type="number" value="15" inputmode="decimal"></div><div><label>Motai</label><input id="h" type="number" value="0.5" inputmode="decimal"></div></div>
+<label>Mix</label><select id="mx"><option value="1,2,4">1 : 2 : 4 (M15, slab/beam)</option><option value="1,1.5,3">1 : 1.5 : 3 (M20)</option><option value="1,3,6">1 : 3 : 6 (lean / PCC)</option></select></div>
+<div class="card"><div class="row"><span>Wet volume</span><b id="v"></b></div><div class="row"><span>Cement</span><b id="c"></b></div><div class="row"><span>Ret (sand)</span><b id="s"></b></div><div class="row"><span>Bajri (crush)</span><b id="a"></b></div></div>
+<p class="note">Dry volume = wet × 1.54. 1 bori cement = 1.25 cft (50 kg). Wastage alag se 3–5% add karein.</p>
+<a class="cta" href="https://wa.me/923445612046?text=Assalam%20o%20Alaikum%2C%20naqshe%20ka%20hisaab%20chahiye" target="_blank" rel="noopener">📲 Naqshe ka sahi hisaab: WhatsApp 0344-5612046</a>
+<p style="text-align:center;margin-top:14px"><a href="index.html">← Aur free tools</a></p>
+<footer><b style="color:#f28c28">Arbab Ali Thebo</b> · Senior Quantity Surveyor (17+ saal) · SMART QS AI</footer></div><script>function f(){var u=document.getElementById('u').value,l=+document.getElementById('l').value,b=+document.getElementById('b').value,h=+document.getElementById('h').value;
+var p=document.getElementById('mx').value.split(',').map(Number),t=p[0]+p[1]+p[2];var cft=l*b*h*(u=='m'?35.3147:1),dry=cft*1.54;
+document.getElementById('v').textContent=cft.toFixed(1)+' cft ('+(cft/35.3147).toFixed(2)+' m³)';
+document.getElementById('c').textContent=(dry*p[0]/t/1.25).toFixed(1)+' bori';document.getElementById('s').textContent=(dry*p[1]/t).toFixed(1)+' cft';document.getElementById('a').textContent=(dry*p[2]/t).toFixed(1)+' cft'}
+document.querySelectorAll('input,select').forEach(function(e){e.oninput=f});f();</script></body></html>
