@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://arbabalithebo92-web.github.io/sitemap.xml
