@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ghar Ka Hisaab: ghar banane ka kharcha calculator</title>
+<meta name="description" content="5, 7 ya 10 marla ghar ka grey structure aur complete kharcha, aur bank qist. Free calculator, Arbab Thebo QS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500&family=Archivo+Narrow:wght@500&family=Oswald:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="page.css">
+</head>
+<body>
+<header class="mast">
+  <div class="container">
+    <a class="word" href="./">Ghar Ka Hisaab</a>
+    <a class="wa" href="https://wa.me/923445612046">WhatsApp 0344-5612046</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container">
+      <div>
+        <h1>Ghar ka poora hisaab, pehle din se</h1>
+        <p class="lead">Plot, manzil aur quality chuno. Kharcha aur bank qist foran dekho.</p>
+        <div class="acts">
+          <a class="btn btn-primary" href="#calc">Hisaab lagao</a>
+          <a class="btn btn-secondary" href="https://wa.me/923445612046?text=Assalam%20o%20Alaikum%2C%20ghar%20ka%20BOQ%20chahiye">QS se baat karo</a>
+        </div>
+      </div>
+
+      <form class="plate calc" id="calc" onsubmit="return false" aria-label="Ghar ka kharcha calculator">
+        <fieldset>
+          <legend>Plot</legend>
+          <div class="seg" data-k="m">
+            <label><input type="radio" name="m" value="5" checked><span>5 marla</span></label>
+            <label><input type="radio" name="m" value="7"><span>7 marla</span></label>
+            <label><input type="radio" name="m" value="10"><span>10 marla</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Manzil</legend>
+          <div class="seg" data-k="f">
+            <label><input type="radio" name="f" value="1"><span>Single</span></label>
+            <label><input type="radio" name="f" value="2" checked><span>Double</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Quality</legend>
+          <div class="seg" data-k="t">
+            <label><input type="radio" name="t" value="0"><span>Economy</span></label>
+            <label><input type="radio" name="t" value="1" checked><span>Standard</span></label>
+            <label><input type="radio" name="t" value="2"><span>Premium</span></label>
+          </div>
+        </fieldset>
+        <div class="area">
+          <label for="area">Covered area (sq ft)</label>
+          <input id="area" type="number" inputmode="numeric" min="0" step="10">
+        </div>
+
+        <div class="out" aria-live="polite">
+          <div class="note">Complete ghar ka andaza</div>
+          <div class="big" id="full">Rs 0</div>
+          <dl class="rows">
+            <dt>Grey structure</dt><dd id="grey">-</dd>
+            <dt>Bank qist, Rs 50 lakh, 5%, 20 saal</dt><dd id="qist">-</dd>
+            <dt>Apni jaib se, kam az kam 10%</dt><dd id="own">-</dd>
+          </dl>
+          <p class="note">Andaza hai, final rate apne sheher ke material rate se banta hai.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="container">
+      <h2>Grey structure ya complete?</h2>
+      <div class="pair">
+        <div class="plate">
+          <h3>Grey structure</h3>
+          <ul>
+            <li>Foundation, columns, beams, chhat</li>
+            <li>Eent ki deewarein aur plaster tak</li>
+            <li>Sarya, cement, ret, bajri</li>
+          </ul>
+        </div>
+        <div class="plate">
+          <h3>Complete ghar</h3>
+          <ul>
+            <li>Grey structure ke saath finishing</li>
+            <li>Tiles, darwaze, khirkiyan, rang</li>
+            <li>Bijli, plumbing, kitchen, bathroom</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="container">
+      <h2>Andaze se BOQ tak</h2>
+      <ol class="steps">
+        <li><div class="n">01</div><h3>Hisaab</h3><p>Upar calculator se moti raqam dekho.</p></li>
+        <li><div class="n">02</div><h3>Naqsha</h3><p>Apna naqsha WhatsApp par bhejo.</p></li>
+        <li><div class="n">03</div><h3>BOQ</h3><p>Har item ki miqdar aur rate ki list lo.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="close">
+    <div class="container">
+      <div>
+        <h2>Naqsha hai? Poori BOQ banwao</h2>
+        <p>Senior QS, 17 saal ka tajurba. Sarya, cement aur eent ki asal miqdar.</p>
+      </div>
+      <div><a class="btn btn-primary" href="https://wa.me/923445612046?text=Assalam%20o%20Alaikum%2C%20naqsha%20bhej%20raha%20hoon">Naqsha bhejo</a></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p>Ghar Ka Hisaab, Arbab Thebo QS. Rates andaze ke liye hain, final BOQ se tasdeeq karein. <a href="mailto:arbabalithebo92@gmail.com">arbabalithebo92@gmail.com</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var GREY = [2800, 3200, 3600], FULL = [4800, 6400, 8600];
+  var st = { m: 5, f: 2, t: 1 };
+  var area = document.getElementById('area');
+  function lakh(n) { if (n >= 1e7) return 'Rs ' + (n / 1e7).toFixed(2).replace(/\.?0+$/, '') + ' crore'; return 'Rs ' + (Math.round(n / 1e4) / 10).toString() + ' lakh'; }
+  function auto() { var p = st.m * 225; return Math.round(p * 0.8 + (st.f > 1 ? p * 0.6 : 0)); }
+  function calc() {
+    var a = +area.value || 0, r = 0.05 / 12, loan = 5000000;
+    var q = loan * r / (1 - Math.pow(1 + r, -240));
+    var full = a * FULL[st.t];
+    document.getElementById('full').innerHTML = lakh(full).replace(/ (lakh|crore)$/, ' <span class="u">$1</span>');
+    document.getElementById('grey').textContent = lakh(a * GREY[st.t]);
+    document.getElementById('qist').textContent = 'Rs ' + Math.round(q).toLocaleString('en-US') + ' / mahina';
+    document.getElementById('own').textContent = lakh(full * 0.1);
+  }
+  document.querySelectorAll('.seg').forEach(function (g) {
+    g.addEventListener('change', function (e) { st[g.dataset.k] = +e.target.value; if (g.dataset.k !== 't') area.value = auto(); calc(); });
+  });
+  area.addEventListener('input', calc);
+  area.value = auto(); calc();
+})();
+</script>
+</body>
+</html>
