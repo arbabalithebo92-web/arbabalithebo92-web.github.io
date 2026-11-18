@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Singly or Doubly Reinforced Beam Checker (IS 456, Free)</title><meta name="description" content="Free IS 456 beam checker: is your beam singly or doubly reinforced? Mu,lim, xu,max, Ast and Asc with bar suggestions for Fe250, Fe415, Fe500."><link rel="canonical" href="https://arbabalithebo92-web.github.io/beam.html">
+<style>*{box-sizing:border-box}body{margin:0;background:#0f1b33;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+.w{max-width:620px;margin:0 auto;padding:22px 16px 40px}a{color:#f28c28}
+.tag{display:inline-block;background:#f28c28;color:#0f1b33;font-weight:800;font-size:13px;letter-spacing:1px;padding:4px 10px;border-radius:6px}
+h1{font-size:30px;line-height:1.15;margin:12px 0 6px}h1 span{color:#f28c28}h2{font-size:21px;margin:26px 0 10px}
+.sub{color:#b8c4da;margin:0 0 16px}.card{background:#18294b;border-radius:14px;padding:16px;margin-bottom:14px}
+label{display:block;font-weight:700;margin:10px 0 5px}input,select{width:100%;padding:11px;border-radius:10px;border:2px solid #3a4f7a;background:#0f1b33;color:#fff;font-size:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2a3c63}.row:last-child{border:0}.row b{color:#f28c28}
+.cta{display:block;text-align:center;background:#25D366;color:#06301a;font-weight:800;font-size:17px;padding:14px;border-radius:12px;text-decoration:none;margin-top:8px}
+.note{font-size:13px;color:#b8c4da}footer{text-align:center;color:#b8c4da;font-size:13px;margin-top:22px}</style></head><body><div class="w"><span class="tag">FREE TOOL · IS 456</span><h1>Singly or doubly <span>reinforced beam?</span></h1><p class="sub">Enter the beam size and design moment. Get Mu,lim, the answer, and the steel needed.</p>
+<div class="card"><div class="g3"><div><label>Width b (mm)</label><input id="b" type="number" value="230"></div><div><label>Depth D (mm)</label><input id="D" type="number" value="450"></div><div><label>Cover to bar c/l (mm)</label><input id="c" type="number" value="40"></div></div>
+<div class="g3"><div><label>Concrete</label><select id="fck"><option>20</option><option selected>25</option><option>30</option><option>35</option></select></div><div><label>Steel</label><select id="fy"><option>250</option><option>415</option><option selected>500</option></select></div><div><label>Mu (kNm)</label><input id="Mu" type="number" value="150"></div></div></div>
+<div class="card"><div class="row"><span>Effective depth d</span><b id="d"></b></div><div class="row"><span>xu,max / d</span><b id="xr"></b></div><div class="row"><span>Mu,lim</span><b id="ml"></b></div><div class="row"><span>Result</span><b id="res"></b></div><div class="row"><span>Tension steel Ast</span><b id="ast"></b></div><div class="row"><span>Compression steel Asc</span><b id="asc"></b></div><div class="row"><span>Suggested bars</span><b id="bars"></b></div></div>
+<div class="card"><b>How it works</b><p class="note" id="ex" style="margin:6px 0 0"></p></div>
+<p class="note">IS 456:2000 limit state. xu,max/d = 0.53 (Fe250), 0.48 (Fe415), 0.46 (Fe500). Mu,lim = 0.36·fck·b·xu,max·(d − 0.42·xu,max). fsc from SP-16 table. Min Ast = 0.85bd/fy, max = 0.04bD. Design check only: final design by a qualified engineer.</p>
+<a class="cta" href="https://wa.me/923445612046?text=Hi%2C%20I%20need%20a%20BOQ%20%2F%20BBS" target="_blank" rel="noopener">📲 Need BOQ / BBS from your drawing? WhatsApp +92 344 5612046</a>
+<p style="text-align:center;margin-top:14px"><a href="index.html">← More free tools</a></p>
+<footer><b style="color:#f28c28">Arbab Ali Thebo</b> · Senior Quantity Surveyor (17+ yrs) · SMART QS AI</footer></div><script>
+function g(i){return document.getElementById(i)}
+var FSC={250:[[0.05,217],[0.2,217]],415:[[0.05,355],[0.1,353],[0.15,342],[0.2,329]],500:[[0.05,424],[0.1,412],[0.15,395],[0.2,370]]};
+function fsc(fy,r){var t=FSC[fy];if(r<=t[0][0])return t[0][1];for(var i=1;i<t.length;i++){if(r<=t[i][0]){var a=t[i-1],z=t[i];return a[1]+(z[1]-a[1])*(r-a[0])/(z[0]-a[0]);}}return t[t.length-1][1];}
+function bars(A){var o=[];[12,16,20,25].forEach(function(d){var n=Math.max(2,Math.ceil(A/(Math.PI*d*d/4)));if(n<=6)o.push(n+'×'+d+'mm');});return o.slice(0,2).join(' or ')||'use 2 layers';}
+function f(){var b=+g('b').value,D=+g('D').value,c=+g('c').value,fck=+g('fck').value,fy=+g('fy').value,Mu=+g('Mu').value*1e6,d=D-c,dc=c;
+var xr={250:0.53,415:0.48,500:0.46}[fy],xm=xr*d,Ml=0.36*fck*b*xm*(d-0.42*xm),ast,asc=0,res;
+var amin=0.85*b*d/fy,amax=0.04*b*D;
+if(Mu<=Ml){res='SINGLY ✅';var k=1-4.6*Mu/(fck*b*d*d);ast=0.5*fck/fy*(1-Math.sqrt(k))*b*d;ast=Math.max(ast,amin);g('asc').textContent='— (2 hanger bars)';}
+else{res='DOUBLY ⚠️';var M2=Mu-Ml,a1=Ml/(0.87*fy*(d-0.42*xm)),a2=M2/(0.87*fy*(d-dc)),fs=fsc(fy,dc/d);asc=M2/((fs-0.446*fck)*(d-dc));ast=a1+a2;g('asc').textContent=Math.round(asc)+' mm² ('+bars(asc)+')';}
+g('d').textContent=d+' mm';g('xr').textContent=xr+' → xu,max = '+Math.round(xm)+' mm';g('ml').textContent=(Ml/1e6).toFixed(1)+' kNm';g('res').textContent=res;
+g('ast').textContent=Math.round(ast)+' mm²'+(ast>amax?' (exceeds 4% – increase section)':'');g('bars').textContent=bars(ast)+' (bottom)';
+g('ex').textContent='Mu,lim = 0.36×'+fck+'×'+b+'×'+Math.round(xm)+'×('+d+' − 0.42×'+Math.round(xm)+') = '+(Ml/1e6).toFixed(1)+' kNm. Mu = '+(Mu/1e6)+' kNm '+(Mu<=Ml?'≤':'>')+' Mu,lim, so the beam is '+(Mu<=Ml?'singly':'doubly')+' reinforced.';}
+document.querySelectorAll('input,select').forEach(function(e){e.addEventListener('input',f)});f();</script></body></html>

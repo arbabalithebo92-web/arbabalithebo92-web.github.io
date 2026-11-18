@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Embankment Volume Calculator: Earthwork, Base Width, Riprap (Free)</title><meta name="description" content="Free embankment / dike / road fill calculator: cross-section area, base width, earthwork volume, loose fill to order and stone riprap volume. Metres or feet."><link rel="canonical" href="https://arbabalithebo92-web.github.io/embankment.html">
+<style>*{box-sizing:border-box}body{margin:0;background:#0f1b33;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+.w{max-width:620px;margin:0 auto;padding:22px 16px 40px}a{color:#f28c28}
+.tag{display:inline-block;background:#f28c28;color:#0f1b33;font-weight:800;font-size:13px;letter-spacing:1px;padding:4px 10px;border-radius:6px}
+h1{font-size:30px;line-height:1.15;margin:12px 0 6px}h1 span{color:#f28c28}h2{font-size:21px;margin:26px 0 10px}
+.sub{color:#b8c4da;margin:0 0 16px}.card{background:#18294b;border-radius:14px;padding:16px;margin-bottom:14px}
+label{display:block;font-weight:700;margin:10px 0 5px}input,select{width:100%;padding:11px;border-radius:10px;border:2px solid #3a4f7a;background:#0f1b33;color:#fff;font-size:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2a3c63}.row:last-child{border:0}.row b{color:#f28c28}
+.cta{display:block;text-align:center;background:#25D366;color:#06301a;font-weight:800;font-size:17px;padding:14px;border-radius:12px;text-decoration:none;margin-top:8px}
+.note{font-size:13px;color:#b8c4da}footer{text-align:center;color:#b8c4da;font-size:13px;margin-top:22px}</style></head><body><div class="w"><span class="tag">FREE TOOL</span><h1>Embankment <span>volume calculator</span></h1><p class="sub">Dike, bund, road or canal bank: section area, earthwork, fill to order and riprap.</p>
+<div class="card"><label>Unit</label><select id="u"><option value="m">Metre</option><option value="ft">Feet</option></select>
+<div class="g3"><div><label>Crest width</label><input id="B" type="number" value="4"></div><div><label>Height (start)</label><input id="H1" type="number" value="3"></div><div><label>Height (end)</label><input id="H2" type="number" value="3"></div></div>
+<div class="g3"><div><label>Slope side 1 (1:n)</label><input id="n1" type="number" value="2"></div><div><label>Slope side 2 (1:n)</label><input id="n2" type="number" value="3"></div><div><label>Length</label><input id="L" type="number" value="100"></div></div>
+<div class="g3"><div><label>Bulking factor</label><input id="k" type="number" value="1.25" step="0.05"></div><div><label>Riprap thk</label><input id="t" type="number" value="0.5"></div><div><label>Riprap on</label><select id="rs"><option value="1">Side 1</option><option value="0">None</option><option value="2">Both</option></select></div></div></div>
+<div class="card"><div class="row"><span>Base width (start)</span><b id="bw"></b></div><div class="row"><span>Section area (start / end)</span><b id="ar"></b></div><div class="row"><span>Compacted volume</span><b id="v"></b></div><div class="row"><span>Loose fill to order</span><b id="lv"></b></div><div class="row"><span>Truck loads (~10 m³)</span><b id="tr"></b></div><div class="row"><span>Stone riprap</span><b id="rr"></b></div></div>
+<div class="card"><b>How it works</b><p class="note" id="ex" style="margin:6px 0 0"></p></div>
+<p class="note">Area = B·H + ½·n1·H² + ½·n2·H². Volume by average end area: (A1 + A2)/2 × L. Riprap = slope length H·√(1+n²) × thickness × L. Bulking factor converts compacted to loose volume (check your soil; typically 1.15–1.35).</p>
+<a class="cta" href="https://wa.me/923445612046?text=Hi%2C%20I%20need%20a%20BOQ%20%2F%20BBS" target="_blank" rel="noopener">📲 Need BOQ / BBS from your drawing? WhatsApp +92 344 5612046</a>
+<p style="text-align:center;margin-top:14px"><a href="index.html">← More free tools</a></p>
+<footer><b style="color:#f28c28">Arbab Ali Thebo</b> · Senior Quantity Surveyor (17+ yrs) · SMART QS AI</footer></div><script>
+function g(i){return document.getElementById(i)}
+function f(){var u=g('u').value,un=u=='ft'?' cft':' m³',ua=u=='ft'?' sft':' m²',ul=u=='ft'?' ft':' m',B=+g('B').value,H1=+g('H1').value,H2=+g('H2').value,n1=+g('n1').value,n2=+g('n2').value,L=+g('L').value,k=+g('k').value,t=+g('t').value,rs=+g('rs').value;
+function A(H){return B*H+0.5*n1*H*H+0.5*n2*H*H}var a1=A(H1),a2=A(H2),v=(a1+a2)/2*L,Hm=(H1+H2)/2;
+var r=0;if(rs>=1)r+=Hm*Math.sqrt(1+n1*n1)*t*L;if(rs==2)r+=Hm*Math.sqrt(1+n2*n2)*t*L;
+var m3=u=='ft'?0.0283168:1;
+g('bw').textContent=(B+(n1+n2)*H1).toFixed(2)+ul;g('ar').textContent=a1.toFixed(2)+' / '+a2.toFixed(2)+ua;g('v').textContent=Math.round(v).toLocaleString()+un;
+g('lv').textContent=Math.round(v*k).toLocaleString()+un;g('tr').textContent=Math.ceil(v*k*m3/10)+' trucks';g('rr').textContent=rs?Math.round(r).toLocaleString()+un:'—';
+g('ex').textContent='A = '+B+'×'+H1+' + ½×'+n1+'×'+H1+'² + ½×'+n2+'×'+H1+'² = '+a1.toFixed(2)+ua+'. Volume = ('+a1.toFixed(2)+' + '+a2.toFixed(2)+')/2 × '+L+' = '+Math.round(v)+un+'.';}
+document.querySelectorAll('input,select').forEach(function(e){e.addEventListener('input',f)});f();</script></body></html>
