@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vane Shear Test Calculator: Undrained Shear Strength Su (Free)</title><meta name="description" content="Free vane shear test calculator: undrained shear strength Su from torque, vane diameter and height, one or both ends shearing, with Bjerrum / plasticity index correction."><link rel="canonical" href="https://arbabalithebo92-web.github.io/vane.html">
+<style>*{box-sizing:border-box}body{margin:0;background:#0f1b33;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+.w{max-width:620px;margin:0 auto;padding:22px 16px 40px}a{color:#f28c28}
+.tag{display:inline-block;background:#f28c28;color:#0f1b33;font-weight:800;font-size:13px;letter-spacing:1px;padding:4px 10px;border-radius:6px}
+h1{font-size:30px;line-height:1.15;margin:12px 0 6px}h1 span{color:#f28c28}h2{font-size:21px;margin:26px 0 10px}
+.sub{color:#b8c4da;margin:0 0 16px}.card{background:#18294b;border-radius:14px;padding:16px;margin-bottom:14px}
+label{display:block;font-weight:700;margin:10px 0 5px}input,select{width:100%;padding:11px;border-radius:10px;border:2px solid #3a4f7a;background:#0f1b33;color:#fff;font-size:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2a3c63}.row:last-child{border:0}.row b{color:#f28c28}
+.cta{display:block;text-align:center;background:#25D366;color:#06301a;font-weight:800;font-size:17px;padding:14px;border-radius:12px;text-decoration:none;margin-top:8px}
+.note{font-size:13px;color:#b8c4da}footer{text-align:center;color:#b8c4da;font-size:13px;margin-top:22px}</style></head><body><div class="w"><span class="tag">FREE TOOL · GEOTECH</span><h1>Vane shear test <span>calculator</span></h1><p class="sub">Torque at failure to undrained shear strength (Su), with the field correction most posts skip.</p>
+<div class="card"><div class="g3"><div><label>Torque T (N·m)</label><input id="T" type="number" value="40"></div><div><label>Vane dia D (mm)</label><input id="D" type="number" value="50"></div><div><label>Vane height H (mm)</label><input id="H" type="number" value="100"></div></div>
+<label>Ends shearing</label><select id="e"><option value="2">Both ends (vane fully buried)</option><option value="1">One end (top flush with surface)</option></select>
+<label>Plasticity index PI (%) for correction</label><input id="PI" type="number" value="30"></div>
+<div class="card"><div class="row"><span>Vane constant K</span><b id="K"></b></div><div class="row"><span>Su (measured)</span><b id="su"></b></div><div class="row"><span>Correction factor μ</span><b id="mu"></b></div><div class="row"><span>Su for design (μ·Su)</span><b id="sd"></b></div><div class="row"><span>Consistency</span><b id="cs"></b></div></div>
+<div class="card"><b>How it works</b><p class="note" id="ex" style="margin:6px 0 0"></p></div>
+<p class="note">Both ends: Su = T / [πD²(H/2 + D/6)]. One end: Su = T / [πD²(H/2 + D/12)]. Field vane over-predicts Su in high-plasticity clays, so design value = μ·Su, with μ ≈ 1.7 − 0.54·log10(PI) (Bjerrum-type correction, capped at 1.0 for low PI). Check against your project's geotech report.</p>
+<a class="cta" href="https://wa.me/923445612046?text=Hi%2C%20I%20need%20a%20BOQ%20%2F%20quantity%20takeoff" target="_blank" rel="noopener">📲 Need BOQ / takeoff from your drawing? WhatsApp +92 344 5612046</a>
+<p style="text-align:center;margin-top:14px"><a href="index.html">← More free tools</a></p>
+<footer><b style="color:#f28c28">Arbab Ali Thebo</b> · Senior Quantity Surveyor (17+ yrs) · SMART QS AI</footer></div><script>
+function g(i){return document.getElementById(i)}
+function f(){var T=+g('T').value,D=+g('D').value/1000,H=+g('H').value/1000,e=+g('e').value,PI=+g('PI').value;
+var K=Math.PI*D*D*(H/2+D/(e==2?6:12)),su=T/K/1000,mu=PI>0?Math.min(1,1.7-0.54*Math.log10(PI)):1,sd=su*mu;
+var c=sd<12?'Very soft':sd<25?'Soft':sd<50?'Firm':sd<100?'Stiff':sd<200?'Very stiff':'Hard';
+g('K').textContent=(K*1e6).toFixed(0)+' ×10⁻⁶ m³';g('su').textContent=su.toFixed(1)+' kPa';g('mu').textContent=mu.toFixed(2);g('sd').textContent=sd.toFixed(1)+' kPa';g('cs').textContent=c+' clay';
+g('ex').textContent='K = π×'+D+'²×('+H+'/2 + '+D+'/'+(e==2?6:12)+') = '+(K*1e6).toFixed(0)+'×10⁻⁶ m³. Su = '+T+' / K = '+su.toFixed(1)+' kPa. μ = '+mu.toFixed(2)+' → design Su = '+sd.toFixed(1)+' kPa.';}
+document.querySelectorAll('input,select').forEach(function(e){e.addEventListener('input',f)});f();</script></body></html>
