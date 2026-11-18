@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>T-Section Beam Calculator: Neutral Axis, Moment of Inertia, Bending Stress (Free)</title><meta name="description" content="Free T-section beam calculator: centroid (neutral axis), moment of inertia, max bending moment for a simply supported UDL beam, and maximum tensile and compressive stresses, flange up or flange down."><link rel="canonical" href="https://arbabalithebo92-web.github.io/tsection.html">
+<style>*{box-sizing:border-box}body{margin:0;background:#0f1b33;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+.w{max-width:620px;margin:0 auto;padding:22px 16px 40px}a{color:#f28c28}
+.tag{display:inline-block;background:#f28c28;color:#0f1b33;font-weight:800;font-size:13px;letter-spacing:1px;padding:4px 10px;border-radius:6px}
+h1{font-size:30px;line-height:1.15;margin:12px 0 6px}h1 span{color:#f28c28}h2{font-size:21px;margin:26px 0 10px}
+.sub{color:#b8c4da;margin:0 0 16px}.card{background:#18294b;border-radius:14px;padding:16px;margin-bottom:14px}
+label{display:block;font-weight:700;margin:10px 0 5px}input,select{width:100%;padding:11px;border-radius:10px;border:2px solid #3a4f7a;background:#0f1b33;color:#fff;font-size:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2a3c63}.row:last-child{border:0}.row b{color:#f28c28}
+.cta{display:block;text-align:center;background:#25D366;color:#06301a;font-weight:800;font-size:17px;padding:14px;border-radius:12px;text-decoration:none;margin-top:8px}
+.note{font-size:13px;color:#b8c4da}footer{text-align:center;color:#b8c4da;font-size:13px;margin-top:22px}</style></head><body><div class="w"><span class="tag">FREE TOOL · SOM</span><h1>T-section beam <span>stress calculator</span></h1><p class="sub">Neutral axis, moment of inertia and max tensile / compressive stress. Flip the T to see why orientation matters.</p>
+<div class="card"><div class="g3"><div><label>Flange width (mm)</label><input id="B" type="number" value="100"></div><div><label>Flange thk (mm)</label><input id="tf" type="number" value="20"></div><div><label>Web thk (mm)</label><input id="tw" type="number" value="20"></div></div>
+<div class="g3"><div><label>Web depth (mm)</label><input id="hw" type="number" value="80"></div><div><label>Span (m)</label><input id="L" type="number" value="8"></div><div><label>UDL (kN/m)</label><input id="w" type="number" value="1.5"></div></div>
+<label>Orientation (simply supported, sagging)</label><select id="o"><option value="up">Flange on top (T)</option><option value="down">Flange at bottom (⊥)</option></select></div>
+<div class="card"><div class="row"><span>Neutral axis from bottom</span><b id="y"></b></div><div class="row"><span>Moment of inertia I</span><b id="I"></b></div><div class="row"><span>Max moment M = wL²/8</span><b id="M"></b></div><div class="row"><span>Max tensile stress (bottom)</span><b id="st"></b></div><div class="row"><span>Max compressive stress (top)</span><b id="sc"></b></div></div>
+<div class="card"><b>How it works</b><p class="note" id="ex" style="margin:6px 0 0"></p></div>
+<p class="note">ȳ = ΣAy/ΣA. I = Σ(bd³/12 + A·h²) (parallel axis). σ = M·y/I. In sagging, the bottom fibre is in tension. Brittle materials like cast iron are weak in tension, so the flange is placed on the tension side. Self-weight not included.</p>
+<a class="cta" href="https://wa.me/923445612046?text=Hi%2C%20I%20need%20a%20BOQ%20%2F%20BBS" target="_blank" rel="noopener">📲 Need BOQ / BBS from your drawing? WhatsApp +92 344 5612046</a>
+<p style="text-align:center;margin-top:14px"><a href="index.html">← More free tools</a></p>
+<footer><b style="color:#f28c28">Arbab Ali Thebo</b> · Senior Quantity Surveyor (17+ yrs) · SMART QS AI</footer></div><script>
+function g(i){return document.getElementById(i)}
+function f(){var B=+g('B').value,tf=+g('tf').value,tw=+g('tw').value,hw=+g('hw').value,L=+g('L').value,w=+g('w').value,up=g('o').value=='up',H=tf+hw;
+var A1=B*tf,A2=tw*hw,y1=up?hw+tf/2:tf/2,y2=up?hw/2:tf+hw/2,yb=(A1*y1+A2*y2)/(A1+A2);
+var I=B*tf*tf*tf/12+A1*Math.pow(y1-yb,2)+tw*hw*hw*hw/12+A2*Math.pow(y2-yb,2),M=w*L*L/8*1e6,st=M*yb/I,sc=M*(H-yb)/I;
+g('y').textContent=yb.toFixed(2)+' mm (top: '+(H-yb).toFixed(2)+' mm)';g('I').textContent=Math.round(I).toLocaleString()+' mm⁴';g('M').textContent=(M/1e6).toFixed(2)+' kNm';
+g('st').textContent=st.toFixed(2)+' N/mm²';g('sc').textContent=sc.toFixed(2)+' N/mm²';
+g('ex').textContent='ȳ = ('+A1+'×'+y1+' + '+A2+'×'+y2+')/'+(A1+A2)+' = '+yb.toFixed(2)+' mm. σt = '+(M/1e6).toFixed(2)+'e6 × '+yb.toFixed(2)+' / '+Math.round(I)+' = '+st.toFixed(2)+' N/mm². '+(up?'Try "flange at bottom": tension drops to '+(M*(H-yb)/I).toFixed(1)+' N/mm².':'Flange on the tension side keeps tensile stress low.');}
+document.querySelectorAll('input,select').forEach(function(e){e.addEventListener('input',f)});f();</script></body></html>
