@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Circular Well Brick Calculator: Bricks, Cement, Sand (Free)</title><meta name="description" content="Free circular well / manhole / soak pit brick calculator: brickwork volume, number of bricks, mortar, cement bags and sand. Metres or feet, wastage included."><link rel="canonical" href="https://arbabalithebo92-web.github.io/well.html">
+<style>*{box-sizing:border-box}body{margin:0;background:#0f1b33;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+.w{max-width:620px;margin:0 auto;padding:22px 16px 40px}a{color:#f28c28}
+.tag{display:inline-block;background:#f28c28;color:#0f1b33;font-weight:800;font-size:13px;letter-spacing:1px;padding:4px 10px;border-radius:6px}
+h1{font-size:30px;line-height:1.15;margin:12px 0 6px}h1 span{color:#f28c28}h2{font-size:21px;margin:26px 0 10px}
+.sub{color:#b8c4da;margin:0 0 16px}.card{background:#18294b;border-radius:14px;padding:16px;margin-bottom:14px}
+label{display:block;font-weight:700;margin:10px 0 5px}input,select{width:100%;padding:11px;border-radius:10px;border:2px solid #3a4f7a;background:#0f1b33;color:#fff;font-size:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2a3c63}.row:last-child{border:0}.row b{color:#f28c28}
+.cta{display:block;text-align:center;background:#25D366;color:#06301a;font-weight:800;font-size:17px;padding:14px;border-radius:12px;text-decoration:none;margin-top:8px}
+.note{font-size:13px;color:#b8c4da}footer{text-align:center;color:#b8c4da;font-size:13px;margin-top:22px}</style></head><body><div class="w"><span class="tag">FREE TOOL</span><h1>Circular well <span>brick calculator</span></h1><p class="sub">Well, manhole, soak pit or septic ring: bricks, mortar, cement and sand in seconds.</p>
+<div class="card"><label>Unit</label><select id="u"><option value="m">Metre</option><option value="ft">Feet</option></select>
+<div class="g3"><div><label>Inner dia</label><input id="d" type="number" value="1.2" inputmode="decimal"></div><div><label>Height</label><input id="h" type="number" value="2" inputmode="decimal"></div><div><label>Wall thk</label><input id="t" type="number" value="0.24" inputmode="decimal"></div></div>
+<label>Bricks per m³ (with mortar)</label><select id="n"><option value="530">530 (common thumb rule)</option><option value="500">500 (modular 190×90×90)</option><option value="480">480 (Pakistan 9×4½×3 in)</option></select>
+<div class="g3"><div><label>Mortar</label><select id="mx"><option value="6">1 : 6</option><option value="5">1 : 5</option><option value="4">1 : 4</option></select></div><div><label>Wastage %</label><input id="w" type="number" value="5" inputmode="decimal"></div><div><label>Rings</label><input id="k" type="number" value="1" inputmode="decimal"></div></div></div>
+<div class="card"><div class="row"><span>Mean diameter</span><b id="md"></b></div><div class="row"><span>Brickwork volume</span><b id="v"></b></div><div class="row"><span>Bricks (no wastage)</span><b id="b0"></b></div><div class="row"><span>Bricks to order</span><b id="b"></b></div><div class="row"><span>Cement</span><b id="c"></b></div><div class="row"><span>Sand</span><b id="s"></b></div></div>
+<div class="card"><b>How it works</b><p class="note" id="ex" style="margin:6px 0 0"></p></div>
+<p class="note">Mean dia = inner dia + wall thickness. Volume = π × mean dia × thickness × height. Dry mortar ≈ 30% of brickwork volume; 1 cement bag = 50 kg = 0.0347 m³. Bricks per m³ depend on brick size and joint; check your local brick.</p>
+<a class="cta" href="https://wa.me/923445612046?text=Hi%2C%20I%20need%20a%20BOQ%20%2F%20quantity%20takeoff" target="_blank" rel="noopener">📲 Need a full BOQ from your drawing? WhatsApp +92 344 5612046</a>
+<p style="text-align:center;margin-top:14px"><a href="index.html">← More free tools</a></p>
+<footer><b style="color:#f28c28">Arbab Ali Thebo</b> · Senior Quantity Surveyor (17+ yrs) · SMART QS AI</footer></div><script>
+function g(i){return document.getElementById(i)}
+function f(){var u=g('u').value,F=u=='ft'?0.3048:1,d=+g('d').value*F,h=+g('h').value*F,t=+g('t').value*F,n=+g('n').value,r=+g('mx').value,w=+g('w').value/100,k=+g('k').value||1;
+var md=d+t,v=Math.PI*md*t*h*k,b0=v*n,b=b0*(1+w),mo=v*0.30,cm=mo/(1+r),bags=cm/0.0347,sd=mo*r/(1+r);
+var cf=35.3147,un=u=='ft'?' ft':' m';
+g('md').textContent=(md/F).toFixed(2)+un;g('v').textContent=v.toFixed(3)+' m³ ('+(v*cf).toFixed(1)+' cft)';
+g('b0').textContent=Math.round(b0).toLocaleString();g('b').textContent=Math.ceil(b/10)*10+'';
+g('c').textContent=Math.ceil(bags)+' bags';g('s').textContent=sd.toFixed(2)+' m³ ('+(sd*cf).toFixed(0)+' cft)';
+g('ex').textContent='('+(d).toFixed(2)+' + '+t.toFixed(2)+') × 3.1416 × '+t.toFixed(2)+' × '+h.toFixed(2)+(k>1?' × '+k:'')+' = '+v.toFixed(3)+' m³ × '+n+' = '+Math.round(b0)+' bricks, + '+(w*100)+'% wastage = '+Math.ceil(b/10)*10+'.';}
+document.querySelectorAll('input,select').forEach(function(e){e.addEventListener('input',f)});
+g('u').addEventListener('change',function(){var m=this.value=='ft';g('d').value=m?4:1.2;g('h').value=m?6.5:2;g('t').value=m?0.75:0.24;f()});f();</script></body></html>
