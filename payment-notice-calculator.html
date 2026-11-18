@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UK Payment Notice Deadline Calculator for Subcontractors (Construction Act) – Free</title>
+<meta name="description" content="Free calculator for UK subcontractors: enter your payment due date and see the Payment Notice, Pay Less Notice and final date for payment under the Construction Act / Scheme. Variation rejected? Get a free account check.">
+<link rel="canonical" href="https://arbabalithebo92-web.github.io/payment-notice-calculator.html">
+<style>
+:root{--navy:#0d1b33;--navy2:#16294a;--orange:#f28c28;--ink:#1d2433;--muted:#5b6578;--bg:#f4f6fa;--ok:#1f8a4c;--bad:#c0392b}
+*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+header{background:var(--navy);color:#fff;padding:28px 18px 34px}
+.wrap{max-width:860px;margin:0 auto}
+header small{color:var(--orange);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:12px}
+h1{margin:6px 0 8px;font-size:clamp(24px,4.5vw,36px);line-height:1.15}
+header p{margin:0;color:#c9d3e6;max-width:640px}
+.card{background:#fff;border-radius:14px;box-shadow:0 4px 18px rgba(13,27,51,.08);padding:22px;margin:-18px 0 18px}
+.card+.card{margin-top:0}
+h2{font-size:20px;margin:0 0 12px;color:var(--navy)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+label{display:block;font-weight:600;font-size:14px;margin-bottom:5px}
+label span{font-weight:400;color:var(--muted);font-size:12px;display:block}
+input,select{width:100%;padding:11px 12px;border:1.5px solid #d4dae6;border-radius:9px;font-size:16px;background:#fff}
+input:focus,select:focus{outline:none;border-color:var(--orange)}
+button{background:var(--orange);color:#fff;border:0;border-radius:9px;padding:13px 20px;font-size:16px;font-weight:700;cursor:pointer;margin-top:16px}
+.timeline{display:none;margin-top:20px}
+.step{display:flex;gap:14px;padding:14px 0;border-bottom:1px dashed #e1e6ef}
+.step:last-child{border:0}
+.dot{flex:0 0 38px;height:38px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.step.hl .dot{background:var(--orange)}
+.step b{display:block;color:var(--navy)}
+.date{font-size:18px;font-weight:700;color:var(--orange)}
+.status{font-size:13px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px}
+.past{background:#fde8e6;color:var(--bad)}.future{background:#e5f5ec;color:var(--ok)}
+.note{background:#fff7ec;border-left:4px solid var(--orange);padding:12px 14px;border-radius:8px;font-size:14px;margin-top:14px}
+ul.check{padding-left:0;list-style:none;margin:0}
+ul.check li{padding:7px 0 7px 30px;position:relative}
+ul.check li:before{content:"✓";position:absolute;left:4px;color:var(--orange);font-weight:800}
+.cta{background:var(--navy);color:#fff;border-radius:14px;padding:22px;margin-bottom:18px}
+.cta h2{color:#fff}.cta p{color:#c9d3e6;margin:0 0 14px}
+.btns a{display:inline-block;text-decoration:none;font-weight:700;border-radius:9px;padding:12px 18px;margin:4px 8px 4px 0}
+.wa{background:#25d366;color:#fff}.em{background:var(--orange);color:#fff}
+.small{font-size:12px;color:var(--muted)}
+footer{text-align:center;padding:16px 16px 30px;font-size:13px;color:var(--muted)}
+footer a{color:var(--navy)}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<small>Free tool for UK subcontractors</small>
+<h1>Payment Notice Deadline Calculator</h1>
+<p>Applied for payment? Find out exactly when the main contractor must issue a <b>Payment Notice</b> and a <b>Pay Less Notice</b>, and when you must be paid, under the Construction Act.</p>
+</div></header>
+
+<main class="wrap" style="padding:0 14px">
+<section class="card">
+<h2>1. Enter your dates</h2>
+<div class="grid">
+<div><label>Payment due date<span>From your subcontract, or the date your application was received (Scheme default)</span></label><input type="date" id="due"></div>
+<div><label>Days from due date to final date for payment<span>Check your subcontract. The Scheme default is 17 days.</span></label><input type="number" id="final" value="17" min="1"></div>
+<div><label>Pay Less Notice: days before final date<span>Check your subcontract. The Scheme default is 7 days.</span></label><input type="number" id="payless" value="7" min="0"></div>
+<div><label>Amount you applied for (£)<span>Optional</span></label><input type="number" id="amt" placeholder="e.g. 12100"></div>
+</div>
+<button onclick="calc()">Show my deadlines</button>
+
+<div class="timeline" id="tl"></div>
+</section>
+
+<section class="card">
+<h2>2. Variation rejected or payment cut? Check these first</h2>
+<ul class="check">
+<li>Was the extra work <b>instructed</b>? Find the email, WhatsApp or site meeting note from the site manager.</li>
+<li>Is it really <b>outside your scope</b>? Compare it against your order or quote line by line.</li>
+<li>Was it caused by <b>another trade</b> (grout haze, glue, damage)? The main contractor can often contra-charge that trade.</li>
+<li>Do you have <b>photos, videos and hours</b> for every extra item?</li>
+<li>Did you receive a valid <b>Payment Notice or Pay Less Notice</b> on time? If not, your application may become the sum due.</li>
+</ul>
+<div class="note">A "lump sum" or "all risk" order does not automatically mean extra work is free. Instructed changes outside your scope can still be valued. Everything depends on your subcontract wording.</div>
+</section>
+
+<section class="cta">
+<h2>Free variation &amp; account check</h2>
+<p>Send me your order, your application and the main contractor's reply. I'm a Quantity Surveyor with 17+ years' experience. I'll tell you what is claimable and draft a professional reply you can send. <b>The first check is free.</b></p>
+<div class="btns">
+<a class="wa" href="https://wa.me/923445612046?text=Hi%20Arbab%2C%20I%20used%20your%20Payment%20Notice%20calculator.%20I%20need%20help%20with%20a%20payment%20%2F%20variation%20issue." target="_blank" rel="noopener">WhatsApp me</a>
+<a class="em" href="mailto:arbabalithebo92@gmail.com?subject=Free%20variation%20check">Email me</a>
+</div>
+<p class="small" style="margin-top:12px">Arbab Ali Thebo · Senior Quantity Surveyor · Takeoffs, payment applications &amp; variation accounts for UK subcontractors (remote)</p>
+</section>
+
+<p class="small">General guidance based on the Housing Grants, Construction and Regeneration Act 1996 (as amended) and the Scheme for Construction Contracts. Your subcontract terms may differ, and this is not legal advice. For large disputes, speak to a construction solicitor.</p>
+</main>
+
+<footer>More free tools: <a href="https://arbabalithebo92-web.github.io/">arbabalithebo92-web.github.io</a></footer>
+
+<script>
+function fmt(d){return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}
+function add(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
+function tag(d){const t=new Date();t.setHours(0,0,0,0);return d<t?'<span class="status past">passed</span>':'<span class="status future">upcoming</span>'}
+function calc(){
+ const v=document.getElementById('due').value;if(!v){alert('Please enter the payment due date');return}
+ const due=new Date(v+'T00:00:00');
+ const fd=parseInt(document.getElementById('final').value)||17;
+ const pl=parseInt(document.getElementById('payless').value)||0;
+ const amt=document.getElementById('amt').value;
+ const pn=add(due,5),fin=add(due,fd),pln=add(fin,-pl);
+ const a=amt?'£'+Number(amt).toLocaleString('en-GB'):'your applied amount';
+ document.getElementById('tl').innerHTML=
+ '<div class="step"><div class="dot">1</div><div><b>Payment due date</b><div class="date">'+fmt(due)+'</div>The start of the clock.</div></div>'+
+ '<div class="step hl"><div class="dot">2</div><div><b>Payment Notice deadline (main contractor)</b><div class="date">'+fmt(pn)+tag(pn)+'</div>Within 5 days of the due date, they must say what they will pay and how it is calculated. If they don\'t, your valid application can become the notified sum.</div></div>'+
+ '<div class="step hl"><div class="dot">3</div><div><b>Pay Less Notice deadline</b><div class="date">'+fmt(pln)+tag(pln)+'</div>To pay less than the notified sum, they must send a Pay Less Notice with reasons by this date. If they miss it, '+a+' may be payable in full.</div></div>'+
+ '<div class="step"><div class="dot">4</div><div><b>Final date for payment</b><div class="date">'+fmt(fin)+tag(fin)+'</div>Money should be in your account. If it isn\'t, you may have the right to suspend work after giving 7 days\' notice.</div></div>';
+ document.getElementById('tl').style.display='block';
+ document.getElementById('tl').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>
