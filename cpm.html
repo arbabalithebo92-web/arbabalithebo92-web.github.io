@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Critical Path & Float Calculator (CPM): Total Float, Free Float (Free)</title><meta name="description" content="Free critical path method (CPM) calculator: enter activities, durations and predecessors to get ES, EF, LS, LF, total float, free float and the critical path. Practise Primavera P6 interview questions."><link rel="canonical" href="https://arbabalithebo92-web.github.io/cpm.html">
+<style>*{box-sizing:border-box}body{margin:0;background:#0f1b33;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+.w{max-width:760px;margin:0 auto;padding:22px 16px 40px}a{color:#f28c28}
+.tag{display:inline-block;background:#f28c28;color:#0f1b33;font-weight:800;font-size:13px;letter-spacing:1px;padding:4px 10px;border-radius:6px}
+h1{font-size:30px;line-height:1.15;margin:12px 0 6px}h1 span{color:#f28c28}h2{font-size:21px;margin:26px 0 10px}
+.sub{color:#b8c4da;margin:0 0 16px}.card{background:#18294b;border-radius:14px;padding:16px;margin-bottom:14px}
+label{display:block;font-weight:700;margin:10px 0 5px}input,select{width:100%;padding:11px;border-radius:10px;border:2px solid #3a4f7a;background:#0f1b33;color:#fff;font-size:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2a3c63}.row:last-child{border:0}.row b{color:#f28c28}
+.cta{display:block;text-align:center;background:#25D366;color:#06301a;font-weight:800;font-size:17px;padding:14px;border-radius:12px;text-decoration:none;margin-top:8px}
+.note{font-size:13px;color:#b8c4da}footer{text-align:center;color:#b8c4da;font-size:13px;margin-top:22px}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:6px 4px;border-bottom:1px solid #2a3c63;text-align:center}th{color:#b8c4da;font-weight:700}td input{padding:6px;font-size:14px;border-radius:6px}.crit td{color:#f28c28;font-weight:800}.btn{background:#f28c28;color:#0f1b33;border:0;font-weight:800;padding:10px 14px;border-radius:10px;font-size:15px;margin-top:10px;cursor:pointer}
+</style></head><body><div class="w"><span class="tag">FREE TOOL · PLANNING</span><h1>Critical path & <span>float calculator</span></h1><p class="sub">Enter activities, durations and predecessors. Get ES, EF, LS, LF, total float, free float and the critical path, the same logic as Primavera P6 (finish-to-start).</p>
+<div class="card" style="overflow-x:auto"><table id="inp"><thead><tr><th>ID</th><th>Activity</th><th>Days</th><th>Predecessors (e.g. A,B)</th><th></th></tr></thead><tbody></tbody></table><button class="btn" onclick="add()">+ Add activity</button></div>
+<div class="card" style="overflow-x:auto"><table id="out"><thead><tr><th>ID</th><th>ES</th><th>EF</th><th>LS</th><th>LF</th><th>TF</th><th>FF</th></tr></thead><tbody></tbody></table>
+<div class="row" style="margin-top:8px"><span>Project duration</span><b id="dur"></b></div><div class="row"><span>Critical path</span><b id="cp"></b></div></div>
+<p class="note">Day-0 convention: ES of a start activity = 0, EF = ES + duration. TF = LS − ES (how long it can slip without delaying the finish). FF = earliest ES of successors − EF (how long it can slip without delaying any successor). Critical = TF 0. FS links only, no lags or calendars.</p>
+<a class="cta" href="https://wa.me/923445612046?text=Hi%2C%20I%20need%20a%20BOQ%20%2F%20schedule" target="_blank" rel="noopener">📲 Need a BOQ or project schedule? WhatsApp +92 344 5612046</a>
+<p style="text-align:center;margin-top:14px"><a href="index.html">← More free tools</a></p>
+<footer><b style="color:#f28c28">Arbab Ali Thebo</b> · Senior Quantity Surveyor (17+ yrs) · SMART QS AI</footer></div><script>
+var rows=[['A','Excavation',3,''],['B','PCC',2,'A'],['C','Footing',5,'B'],['D','Column',4,'C'],['E','Beam & slab',6,'D'],['F','Plumbing sleeves',2,'C'],['G','Electrical conduits',3,'F']];
+var tb=document.querySelector('#inp tbody');
+function draw(){tb.innerHTML='';rows.forEach(function(r,i){var tr=document.createElement('tr');tr.innerHTML='<td><input value="'+r[0]+'" style="width:44px"></td><td><input value="'+r[1]+'"></td><td><input type="number" value="'+r[2]+'" style="width:60px"></td><td><input value="'+r[3]+'" style="width:90px"></td><td><a href="#" style="text-decoration:none">✕</a></td>';
+var ins=tr.querySelectorAll('input');ins.forEach(function(x,j){x.addEventListener('input',function(){rows[i][j]=j==2?+x.value:x.value;calc()})});tr.querySelector('a').onclick=function(e){e.preventDefault();rows.splice(i,1);draw()};tb.appendChild(tr)});calc()}
+function add(){rows.push([String.fromCharCode(65+rows.length),'New activity',1,rows.length?rows[rows.length-1][0]:'']);draw()}
+function calc(){var o=document.querySelector('#out tbody');o.innerHTML='';var A={},ids=[];rows.forEach(function(r){var id=(r[0]+'').trim().toUpperCase();if(!id)return;ids.push(id);A[id]={d:+r[2]||0,p:(r[3]+'').toUpperCase().split(/[ ,;]+/).filter(Boolean),s:[]}});
+ids.forEach(function(id){A[id].p=A[id].p.filter(function(p){return A[p]&&p!=id});A[id].p.forEach(function(p){A[p].s.push(id)})});
+var order=[],seen={},st={},bad=false;function v(id){if(st[id]==1){bad=true;return}if(st[id]==2)return;st[id]=1;A[id].p.forEach(v);st[id]=2;order.push(id)}ids.forEach(v);
+if(bad){document.getElementById('dur').textContent='Loop in logic!';document.getElementById('cp').textContent='—';return}
+order.forEach(function(id){var a=A[id];a.es=a.p.length?Math.max.apply(null,a.p.map(function(p){return A[p].ef})):0;a.ef=a.es+a.d});
+var T=Math.max.apply(null,ids.map(function(i){return A[i].ef}).concat([0]));
+order.slice().reverse().forEach(function(id){var a=A[id];a.lf=a.s.length?Math.min.apply(null,a.s.map(function(s){return A[s].ls})):T;a.ls=a.lf-a.d;a.tf=a.ls-a.es;a.ff=(a.s.length?Math.min.apply(null,a.s.map(function(s){return A[s].es})):T)-a.ef});
+var cp=[];ids.forEach(function(id){var a=A[id],tr=document.createElement('tr');if(a.tf==0){tr.className='crit';cp.push(id)}tr.innerHTML='<td>'+id+'</td><td>'+a.es+'</td><td>'+a.ef+'</td><td>'+a.ls+'</td><td>'+a.lf+'</td><td>'+a.tf+'</td><td>'+a.ff+'</td>';o.appendChild(tr)});
+document.getElementById('dur').textContent=T+' days';document.getElementById('cp').textContent=cp.join(' → ')}
+draw();</script></body></html>
