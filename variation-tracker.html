@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Free Variation & Final Account Tracker for UK Subcontractors</title>
+<meta name="description" content="Free tool for UK subcontractors: log variations and verbal instructions, create a Confirmation of Verbal Instruction email in one click, and see your final account balance. By Arbab Ali Thebo, Senior QS.">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Arial,sans-serif;background:#f4f6fa;color:#1d2433}
+header{background:#0f1f3a;color:#fff;padding:22px 5%}header h1{margin:0;font-size:clamp(22px,4vw,32px)}header h1 b{color:#ff7a1a}
+header p{margin:8px 0 0;opacity:.85;max-width:760px}
+main{padding:20px 5%;max-width:1150px;margin:auto}
+.card{background:#fff;border:1px solid #e3e7ef;border-radius:10px;padding:18px;margin-bottom:18px}
+h2{font-size:19px;margin:0 0 12px}h2 span{color:#ff7a1a}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+label{font-size:12px;color:#556;display:block;margin-bottom:3px}
+input,select,textarea{width:100%;padding:9px;border:1px solid #cfd6e3;border-radius:6px;font:inherit;font-size:14px}
+button{background:#ff7a1a;color:#fff;border:0;padding:10px 16px;border-radius:6px;font-weight:700;cursor:pointer;font-size:14px}
+button.sec{background:#0f1f3a}button.ghost{background:#e9edf4;color:#1d2433}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:7px 6px;border-bottom:1px solid #eef1f6;text-align:left;vertical-align:top}
+th{background:#f4f6fa;font-size:12px}td.n{text-align:right;white-space:nowrap}
+.tag{display:inline-block;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:700}
+.Verbal{background:#ffe3e3;color:#b42318}.Written{background:#e6f4ea;color:#1e7d32}.CVI{background:#fff1e0;color:#b45309}
+.st-Agreed{color:#1e7d32;font-weight:700}.st-Submitted{color:#b45309;font-weight:700}.st-Disputed{color:#b42318;font-weight:700}.st-Not{color:#667}
+.fa{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.box{background:#0f1f3a;color:#fff;border-radius:8px;padding:14px}.box small{opacity:.75;display:block}.box b{font-size:22px;color:#ff7a1a}
+.warn{background:#fff5f5;border-left:4px solid #b42318;padding:10px 12px;border-radius:6px;margin-top:10px;font-size:14px}
+.ok{background:#f0faf3;border-left:4px solid #1e7d32;padding:10px 12px;border-radius:6px;margin-top:10px;font-size:14px}
+pre{white-space:pre-wrap;background:#f7f8fb;border:1px solid #e3e7ef;padding:12px;border-radius:6px;font-family:inherit;font-size:14px}
+.cta{background:#fff7f0;border:2px dashed #ff7a1a}.cta a.b{display:inline-block;margin:8px 8px 0 0;padding:10px 16px;border-radius:6px;color:#fff;text-decoration:none;font-weight:700}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+footer{text-align:center;font-size:13px;color:#667;padding:20px}
+@media print{header,.noprint,.cta,footer{display:none}body{background:#fff}.card{border:0}}
+</style></head><body>
+<header><h1>Variation &amp; <b>Final Account</b> Tracker</h1>
+<p>Free tool for UK subcontractors. Log every extra, turn a verbal "crack on" into a written record in one click, and see what you're really owed at final account.</p></header>
+<main>
+<div class="card noprint"><h2>1. Contract <span>details</span></h2><div class="grid">
+<div><label>Your company</label><input id="co" placeholder="Your company name"></div>
+<div><label>Main contractor</label><input id="mc" placeholder="Main contractor"></div>
+<div><label>Project</label><input id="pj" placeholder="Project / site"></div>
+<div><label>Original subcontract sum (£)</label><input id="cs" type="number" value="0"></div>
+<div><label>Paid to date (£)</label><input id="pd" type="number" value="0"></div>
+<div><label>Retention %</label><input id="rp" type="number" value="5"></div>
+<div><label>Contra charges claimed (£)</label><input id="cc" type="number" value="0"></div>
+</div></div>
+
+<div class="card noprint"><h2>2. Add a <span>variation</span></h2><div class="grid">
+<div><label>Date instructed</label><input id="vd" type="date"></div>
+<div><label>Instructed by (name)</label><input id="vb" placeholder="e.g. Site manager"></div>
+<div><label>How instructed</label><select id="vh"><option>Verbal</option><option>Written</option><option value="CVI">Verbal + CVI sent</option></select></div>
+<div style="grid-column:1/-1"><label>Description of extra work</label><input id="vx" placeholder="e.g. Extra 2-layer partition to plant room, 3.2m high"></div>
+<div><label>Value (£)</label><input id="vv" type="number" value="0"></div>
+<div><label>Status</label><select id="vs"><option value="Not">Not submitted</option><option>Submitted</option><option>Agreed</option><option>Disputed</option></select></div>
+</div><div class="row"><button onclick="addV()">Add variation</button><button class="ghost" onclick="sample()">Load sample data</button><button class="ghost" onclick="if(confirm('Clear all variations?')){V=[];save();draw()}">Clear all</button></div></div>
+
+<div class="card"><h2>3. Variation <span>register</span></h2>
+<div style="overflow-x:auto"><table><thead><tr><th>#</th><th>Date</th><th>Description</th><th>Instructed</th><th>Status</th><th class="n">Value £</th><th class="noprint"></th></tr></thead><tbody id="tb"></tbody></table></div>
+<div id="flags"></div></div>
+
+<div class="card"><h2>4. Final account <span>summary</span></h2><div class="fa" id="fa"></div><div id="fanote"></div>
+<div class="row noprint"><button class="sec" onclick="window.print()">Print / save as PDF</button><button class="ghost" onclick="csv()">Download CSV</button></div></div>
+
+<div class="card noprint"><h2>5. Confirmation of Verbal Instruction <span>(CVI)</span></h2>
+<p style="margin-top:0;font-size:14px">Pick a verbal variation and send this to the main contractor the same day. A written record now saves an argument at final account.</p>
+<select id="cvisel" onchange="cvi()"></select><pre id="cvi">Add a verbal variation above to create the email.</pre>
+<div class="row"><button onclick="copyCVI()">Copy email text</button></div></div>
+
+<div class="card cta noprint"><h2>Final account dragging, or extras being knocked back?</h2>
+<p>I'm Arbab Ali Thebo, a Senior Quantity Surveyor with 17+ years. I prepare variation claims, applications and final accounts for UK subcontractors, remotely and fast. First look is free.</p>
+<a class="b" style="background:#ff7a1a" href="https://docs.google.com/forms/d/e/1FAIpQLSee8oksDbECgx2yQFMiluKVhWIVnfFZbQZdYuIst71AYxy5xw/viewform" target="_blank">Request a free check</a>
+<a class="b" style="background:#25d366" href="https://wa.me/923445612046?text=Hi%20Arbab%2C%20I%20used%20your%20variation%20tracker" target="_blank">WhatsApp me</a>
+<p style="font-size:13px;margin-bottom:0">More free tools: <a href="payment-notice-calculator.html">Payment Notice Deadline Calculator</a> · <a href="retention-calculator.html">Retention Calculator</a> · <a href="index.html">All tools</a></p></div>
+<p style="font-size:12px;color:#667" class="noprint">Your data stays in your own browser on this device. Nothing is sent anywhere. This tool is a record-keeping aid, not legal advice.</p>
+</main>
+<footer>Built by Arbab Ali Thebo, Senior Quantity Surveyor · arbabalithebo92@gmail.com</footer>
+<script>
+const $=id=>document.getElementById(id);const F=['co','mc','pj','cs','pd','rp','cc'];
+let V=[];const gbp=n=>'£'+(+n||0).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+const uk=d=>d?d.split('-').reverse().join('/'):'';const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function save(){try{localStorage.setItem('vt',JSON.stringify({V,f:Object.fromEntries(F.map(k=>[k,$(k).value]))}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem('vt')||'null');if(d){V=d.V||[];F.forEach(k=>{if(d.f&&d.f[k]!=null)$(k).value=d.f[k]})}}catch(e){}}
+function addV(){const x=$('vx').value.trim();if(!x){alert('Add a description');return}
+V.push({d:$('vd').value,b:$('vb').value.trim(),h:$('vh').value,x,v:+$('vv').value||0,s:$('vs').value});$('vx').value='';$('vv').value=0;save();draw()}
+function del(i){V.splice(i,1);save();draw()}
+function setS(i,s){V[i].s=s;save();draw()}
+function draw(){const tb=$('tb');tb.innerHTML=V.map((r,i)=>`<tr><td>V${String(i+1).padStart(2,'0')}</td><td>${esc(uk(r.d))}</td><td>${esc(r.x)}<br><small style="color:#667">by ${esc(r.b)||'?'}</small></td><td><span class="tag ${r.h}">${r.h==='CVI'?'Verbal + CVI':r.h}</span></td><td><select onchange="setS(${i},this.value)" class="st-${r.s}">${['Not','Submitted','Agreed','Disputed'].map(s=>`<option value="${s}" ${s===r.s?'selected':''}>${s==='Not'?'Not submitted':s}</option>`).join('')}</select></td><td class="n">${gbp(r.v)}</td><td class="noprint"><button class="ghost" onclick="del(${i})">✕</button></td></tr>`).join('')||'<tr><td colspan="7" style="color:#667">No variations yet. Add one above or load the sample.</td></tr>';
+const verbal=V.filter(r=>r.h==='Verbal'),notsub=V.filter(r=>r.s==='Not'),nob=V.filter(r=>!r.b);let f='';
+if(verbal.length)f+=`<div class="warn"><b>${verbal.length} verbal-only variation(s) worth ${gbp(verbal.reduce((a,r)=>a+r.v,0))}.</b> These are the ones that get knocked back at final account. Send a CVI (section 5) today.</div>`;
+if(notsub.length)f+=`<div class="warn"><b>${notsub.length} variation(s) not submitted yet</b> (${gbp(notsub.reduce((a,r)=>a+r.v,0))}). Price them and include them in your next application.</div>`;
+if(nob.length)f+=`<div class="warn"><b>${nob.length} variation(s) with no name recorded.</b> Always note who instructed it.</div>`;
+if(V.length&&!f)f='<div class="ok">Every variation has a written record and has been submitted. Good position for final account.</div>';
+$('flags').innerHTML=f;
+const cs=+$('cs').value||0,pd=+$('pd').value||0,rp=+$('rp').value||0,cc=+$('cc').value||0;
+const sum=s=>V.filter(r=>r.s===s).reduce((a,r)=>a+r.v,0);const ag=sum('Agreed'),su=sum('Submitted'),di=sum('Disputed'),ns=sum('Not');
+const claimed=cs+ag+su+di+ns,agreedFA=cs+ag,ret=claimed*rp/100,due=claimed-pd-cc;
+$('fa').innerHTML=[['Original subcontract sum',cs],['Agreed variations',ag],['Submitted, awaiting agreement',su],['Disputed variations',di],['Not yet submitted',ns],['Total final account claimed',claimed],['Paid to date',pd],['Contra charges claimed',cc],['Balance still owed (before retention)',due],['Retention held ('+rp+'%)',ret]].map(([t,n])=>`<div class="box"><small>${t}</small><b>${gbp(n)}</b></div>`).join('');
+$('fanote').innerHTML=cs?`<div class="${di+su>0?'warn':'ok'}">Agreed position today: <b>${gbp(agreedFA)}</b>. Still at risk: <b>${gbp(su+di+ns)}</b> across unagreed variations${cc?`, plus ${gbp(cc)} of contra charges you should ask them to back up with evidence`:''}.</div>`:'';
+const sel=$('cvisel'),vs=V.map((r,i)=>[r,i]).filter(([r])=>r.h==='Verbal');sel.innerHTML=vs.map(([r,i])=>`<option value="${i}">V${String(i+1).padStart(2,'0')} – ${esc(r.x).slice(0,60)}</option>`).join('');cvi()}
+function cvi(){const i=$('cvisel').value;if(i===''||!V[i]){$('cvi').textContent='Add a verbal variation above to create the email.';return}const r=V[i];
+$('cvi').textContent=`Subject: Confirmation of Verbal Instruction – ${$('pj').value||'[Project]'} – V${String(+i+1).padStart(2,'0')}
+
+Dear ${$('mc').value||'[Main contractor]'},
+
+We confirm the verbal instruction given${r.b?' by '+r.b:''} on ${uk(r.d)||'[date]'} to carry out the following additional work:
+
+${r.x}
+
+We are proceeding as instructed and will treat this as a variation to our subcontract. Our estimated value is ${gbp(r.v)}, to be confirmed on completion.
+
+If you do not agree that this is a variation, please let us know in writing within 7 days. Otherwise we will include it in our next application for payment.
+
+Kind regards,
+${$('co').value||'[Your company]'}`}
+function copyCVI(){navigator.clipboard.writeText($('cvi').textContent).then(()=>alert('Copied. Paste it into an email to the main contractor.'))}
+function csv(){const rows=[['Ref','Date','Description','Instructed by','How','Status','Value']].concat(V.map((r,i)=>['V'+String(i+1).padStart(2,'0'),r.d,r.x,r.b,r.h,r.s==='Not'?'Not submitted':r.s,r.v]));
+const t=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download='variation-register.csv';a.click()}
+function sample(){$('co').value='Sample Drylining Ltd';$('mc').value='Example Build Ltd';$('pj').value='Sample office block';$('cs').value=48000;$('pd').value=39500;$('rp').value=5;$('cc').value=2000;
+V=[{d:'2026-09-03',b:'Site manager',h:'Written',x:'Extra bulkhead to corridor ceiling, 18m',v:1450,s:'Agreed'},{d:'2026-09-17',b:'Site manager',h:'Verbal',x:'Additional 2-layer partition to plant room, 3.2m high',v:2380,s:'Not'},{d:'2026-10-02',b:'',h:'Verbal',x:'Re-board damaged wall after M&E second fix',v:640,s:'Submitted'},{d:'2026-10-20',b:'Project manager',h:'CVI',x:'Fire-rated boxing to risers, 6 nr',v:1920,s:'Disputed'}];save();draw()}
+F.forEach(k=>$(k).addEventListener('input',()=>{save();draw()}));$('vd').valueAsDate=new Date();load();draw();
+</script></body></html>
