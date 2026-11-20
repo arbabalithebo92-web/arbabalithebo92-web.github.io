@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Retention Release Calculator – UK Construction Subcontractors | Free</title>
+<meta name="description" content="Free UK construction retention calculator: how much retention is held, when the first and second halves are due, and late-payment interest on overdue retention.">
+<style>
+:root{--n:#0f2a4a;--o:#f28c28;--bg:#f4f6f9;--m:#6b7785;--g:#1f9d55;--r:#d64545}
+*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#1d2733}
+header{background:var(--n);color:#fff;padding:18px 20px;border-bottom:4px solid var(--o)}header h1{margin:0;font-size:22px}header p{margin:4px 0 0;color:#c9d4e3;font-size:14px}
+.w{max-width:1000px;margin:0 auto;padding:16px;display:grid;gap:16px}.c{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+h2{margin:0 0 10px;font-size:15px;color:var(--n);text-transform:uppercase}label{font-size:12px;color:var(--m);display:block;margin-bottom:3px}
+input,select{padding:8px;border:1px solid #cfd6df;border-radius:6px;font-size:14px;width:100%}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.k{border:1px solid #e3e8ee;border-radius:8px;padding:10px}.k b{display:block;font-size:21px;margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:7px 6px;border-bottom:1px solid #eef1f5;text-align:left}th{font-size:12px;color:var(--m)}.n{text-align:right;font-weight:600}
+.v{border-left:4px solid var(--o);background:#fff7ee;padding:10px 12px;border-radius:6px;line-height:1.55}.due{color:var(--r);font-weight:700}.ok{color:var(--g);font-weight:700}
+.note{font-size:13px;color:var(--m);line-height:1.6}footer{text-align:center;color:var(--m);font-size:12px;padding:6px 0 24px}
+</style></head><body>
+<header><h1>Retention Release Calculator – UK Subcontractors</h1><p>How much of your money is held, when it's due back, and what interest you can claim if it's late.</p></header>
+<div class="w">
+<div class="c"><h2>Your subcontract</h2><div class="g">
+<div><label>Gross value of work (final account or latest valuation), £</label><input id="val" type="number" value="120000"></div>
+<div><label>Retention %</label><input id="pct" type="number" step="0.1" value="5"></div>
+<div><label>Released at practical completion (% of retention)</label><input id="first" type="number" value="50"></div>
+<div><label>Practical completion date (your works)</label><input id="pc" type="date"></div>
+<div><label>Defects / rectification period (months)</label><input id="dlp" type="number" value="12"></div>
+<div><label>Retention release date in subcontract (if stated)</label><input id="rrd" type="date"></div>
+<div><label>Retention already released, £</label><input id="paid" type="number" value="0"></div>
+<div><label>Bank of England base rate % (check current)</label><input id="br" type="number" step="0.01" value="4"></div>
+</div></div>
+<div class="c"><h2>Result</h2><div class="g" id="k"></div>
+<table style="margin-top:12px"><thead><tr><th>Instalment</th><th class="n">Amount</th><th>Due date</th><th>Status today</th><th class="n">Late-payment interest so far*</th></tr></thead><tbody id="t"></tbody></table>
+<div class="v" id="v" style="margin-top:12px"></div></div>
+<div class="c"><h2>Good to know</h2><p class="note">
+• Since the Construction Act amendments (1 Oct 2011), release of a subcontractor's retention generally can't be made conditional on events in another contract (e.g. the main contract's certificate). If your subcontract has no release date, check the JCT/NEC terms or the Scheme for Construction Contracts.<br>
+• Once the release date passes, the retention should come through the payment cycle like any other sum due: chase it with a payment application.<br>
+• *Interest shown uses the Late Payment of Commercial Debts (Interest) Act rate of base rate + 8% a year, for illustration. Your contract may set its own rate. This tool is guidance, not legal advice.</p></div>
+</div>
+<footer>Free tool by Arbab Ali Thebo, Senior Quantity Surveyor (17+ yrs) · Final accounts, retention and payment applications for UK subcontractors: arbabalithebo92@gmail.com · first check free</footer>
+<script>
+const $=i=>document.getElementById(i);const d0=new Date();d0.setMonth(d0.getMonth()-14);$('pc').value=d0.toISOString().slice(0,10);
+const gbp=x=>'£'+Number(x).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fd=d=>d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+function calc(){const val=+$('val').value||0,pct=+$('pct').value||0,fi=(+$('first').value||0)/100,paid=+$('paid').value||0,rate=((+$('br').value||0)+8)/100;
+const held=val*pct/100,a1=held*fi,a2=held-a1,pc=$('pc').value?new Date($('pc').value):null;const today=new Date();
+let d2=$('rrd').value?new Date($('rrd').value):null;if(!d2&&pc){d2=new Date(pc);d2.setMonth(d2.getMonth()+(+$('dlp').value||0))}
+const inst=[{n:'1st half (practical completion)',a:a1,d:pc},{n:'2nd half (end of defects period / release date)',a:a2,d:d2}];let left=paid,tot=0,owe=0;
+$('t').innerHTML=inst.map(x=>{const p=Math.min(left,x.a);left-=p;const out=x.a-p;let st='',int=0;
+if(!x.d)st='Enter dates';else if(out<=0.005)st='<span class="ok">Paid</span>';else if(today>=x.d){const days=Math.floor((today-x.d)/864e5);int=out*rate*days/365;st=`<span class="due">Due ${days} days ago</span>`;owe+=out}else{st=`Not yet due (${Math.ceil((x.d-today)/864e5)} days)`}
+tot+=int;return `<tr><td>${x.n}</td><td class="n">${gbp(x.a)}</td><td>${x.d?fd(x.d):'-'}</td><td>${st}</td><td class="n">${gbp(int)}</td></tr>`}).join('');
+$('k').innerHTML=`<div class="k">Total retention held<b>${gbp(held)}</b></div><div class="k">Still outstanding<b>${gbp(Math.max(0,held-paid))}</b></div><div class="k">Overdue now<b style="color:${owe>0?'#d64545':'#1f9d55'}">${gbp(owe)}</b></div><div class="k">Interest you could claim*<b>${gbp(tot)}</b></div>`;
+$('v').innerHTML=owe>0?`<b>${gbp(owe)}</b> of your retention is overdue. Put it on your next payment application, refer to the release date in your subcontract, and keep copies. If it isn't paid, the interest above keeps growing every day.`:`Nothing is overdue yet. Put the release date${d2?' ('+fd(d2)+')':''} in your diary and include the retention on the first application after that date.`}
+document.addEventListener('input',calc);calc();
+</script></body></html>
