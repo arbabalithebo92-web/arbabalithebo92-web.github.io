@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Escalation / Price Adjustment Calculator (PEC Formula) – Pakistan | Free</title>
+<meta name="description" content="Free online price adjustment (escalation) calculator for Pakistan construction contracts using the PEC formula: fixed portion, weightages, base and current indices for labour, cement, steel, bitumen and diesel.">
+<style>
+:root{--n:#0f2a4a;--o:#f28c28;--bg:#f4f6f9;--m:#6b7785;--g:#1f9d55;--r:#d64545}
+*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#1d2733}
+header{background:var(--n);color:#fff;padding:18px 20px;border-bottom:4px solid var(--o)}header h1{margin:0;font-size:22px}header p{margin:4px 0 0;color:#c9d4e3;font-size:14px}
+.w{max-width:1000px;margin:0 auto;padding:16px;display:grid;gap:16px}.c{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.08);overflow-x:auto}
+h2{margin:0 0 10px;font-size:15px;color:var(--n);text-transform:uppercase}label{font-size:12px;color:var(--m);display:block;margin-bottom:3px}
+input{padding:8px;border:1px solid #cfd6df;border-radius:6px;font-size:14px;width:100%}table{width:100%;border-collapse:collapse;min-width:640px;font-size:14px}
+th,td{padding:6px;border-bottom:1px solid #eef1f5;text-align:left}th{font-size:12px;color:var(--m)}.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}.k{border:1px solid #e3e8ee;border-radius:8px;padding:10px}.k b{display:block;font-size:22px;margin-top:2px}
+button{padding:8px 12px;border:0;border-radius:6px;background:var(--o);color:#fff;font-weight:600;cursor:pointer}.x{background:none;color:var(--r);font-size:18px}
+.v{border-left:4px solid var(--o);background:#fff7ee;padding:10px 12px;border-radius:6px;line-height:1.55}.warn{color:var(--r);font-weight:600}
+.note{font-size:13px;color:var(--m);line-height:1.6}footer{text-align:center;color:var(--m);font-size:12px;padding:6px 0 24px}
+</style></head><body>
+<header><h1>Escalation / Price Adjustment Calculator – PEC Formula (Pakistan)</h1><p>Free tool for contractors, consultants and QS. Works for monthly IPC escalation bills.</p></header>
+<div class="w">
+<div class="c"><h2>1. Bill details</h2><div class="g">
+<div><label>Value of work done this IPC (V), excluding escalation, Rs</label><input id="V" type="number" value="25000000"></div>
+<div><label>Fixed (non-adjustable) portion "a"</label><input id="a" type="number" step="0.01" value="0.35"></div>
+<div><label>IPC / month</label><input id="mo" value="IPC-06 (sample)"></div>
+</div></div>
+<div class="c"><h2>2. Adjustable elements (from Appendix-C of your contract)</h2>
+<table><thead><tr><th>Element</th><th>Weightage</th><th>Base index / rate (Lo, Mo…)</th><th>Current index / rate (Ln, Mn…)</th><th class="n">Change</th><th class="n">Weighted factor</th><th></th></tr></thead><tbody id="t"></tbody></table>
+<div style="margin-top:8px"><button id="add">+ Add element</button></div>
+<p class="note">Base = index/rate on the base date (usually 28 days before bid submission). Current = index/rate for the month of the IPC (FBS / OGRA / Engineer-approved sources, as your contract states).</p></div>
+<div class="c"><h2>3. Result</h2><div class="g" id="k"></div><div class="v" id="v" style="margin-top:12px"></div></div>
+<div class="c"><h2>How the formula works</h2><p class="note"><b>Pn = a + b·(Ln/Lo) + c·(Mn/Mo) + d·(Sn/So) + …</b> where a + b + c + d + … = 1.<br>
+<b>Escalation for the IPC = V × (Pn − 1).</b> A positive result is payable to the contractor; a negative result is a deduction (de-escalation).<br>
+Always use the weightages, sources and base dates in your own contract's Appendix-C / Particular Conditions. Check whether your contract has a ceiling, a threshold, or excludes variations and dayworks.</p></div>
+</div>
+<footer>Free tool by Arbab Ali Thebo, Senior Quantity Surveyor (17+ yrs) · Escalation bill checks on request: arbabalithebo92@gmail.com · WhatsApp +92 344 5612046 · Sample figures only</footer>
+<script>
+const $=i=>document.getElementById(i);
+let el=[{n:'Labour',w:.15,b:1500,c:1650},{n:'Cement',w:.15,b:1150,c:1290},{n:'Steel',w:.20,b:255000,c:268000},{n:'Diesel (HSD)',w:.10,b:265,c:279},{n:'Bitumen',w:.05,b:180000,c:176000}];
+const f=(x,d=0)=>Number(x).toLocaleString('en-PK',{minimumFractionDigits:d,maximumFractionDigits:d});
+function draw(){$('t').innerHTML=el.map((e,i)=>`<tr><td><input value="${e.n}" data-i="${i}" data-k="n"></td><td><input type="number" step="0.01" value="${e.w}" data-i="${i}" data-k="w"></td><td><input type="number" step="any" value="${e.b}" data-i="${i}" data-k="b"></td><td><input type="number" step="any" value="${e.c}" data-i="${i}" data-k="c"></td><td class="n" id="ch${i}"></td><td class="n" id="wf${i}"></td><td><button class="x" data-d="${i}">×</button></td></tr>`).join('');calc()}
+function calc(){const V=+$('V').value||0,a=+$('a').value||0;let Pn=a,ws=a,rows=[];
+el.forEach((e,i)=>{const r=(+e.b)?(+e.c)/(+e.b):1,wf=(+e.w)*r;Pn+=wf;ws+=+e.w;const ch=$('ch'+i),w=$('wf'+i);if(ch){ch.textContent=((r-1)*100).toFixed(2)+'%';ch.style.color=r>=1?'#1f9d55':'#d64545'}if(w)w.textContent=wf.toFixed(4);rows.push({n:e.n,amt:V*(+e.w)*(r-1)})});
+const E=V*(Pn-1);const ok=Math.abs(ws-1)<0.0005;
+$('k').innerHTML=`<div class="k">Sum of weightages<b style="color:${ok?'#1f9d55':'#d64545'}">${ws.toFixed(3)}</b></div><div class="k">Adjustment factor Pn<b>${Pn.toFixed(4)}</b></div><div class="k">Escalation this IPC<b style="color:${E>=0?'#1f9d55':'#d64545'}">Rs ${f(E)}</b></div><div class="k">IPC value incl. escalation<b>Rs ${f(V+E)}</b></div>`;
+const top=[...rows].sort((x,y)=>Math.abs(y.amt)-Math.abs(x.amt));
+$('v').innerHTML=(ok?'':'<div class="warn">⚠ Weightages (a + b + c + …) must add up to 1.000. Check Appendix-C.</div>')+`For ${$('mo').value}, the adjustment factor is <b>${Pn.toFixed(4)}</b>, so escalation is <b>Rs ${f(E)}</b> (${E>=0?'payable to the contractor':'a deduction'}).<br>Biggest drivers: `+top.slice(0,3).map(r=>`${r.n} Rs ${f(r.amt)}`).join(' · ')+`.<br>Common mistakes we see in escalation bills: using the wrong base month, applying escalation to variations/dayworks that are excluded, and keeping a weightage (e.g. steel) for work that has no steel in it.`}
+document.addEventListener('input',e=>{const i=e.target.dataset.i;if(i!==undefined)el[i][e.target.dataset.k]=e.target.value;calc()});
+document.addEventListener('click',e=>{if(e.target.dataset.d!==undefined){el.splice(+e.target.dataset.d,1);draw()}});
+$('add').onclick=()=>{el.push({n:'Element',w:0,b:1,c:1});draw()};draw();
+</script></body></html>
