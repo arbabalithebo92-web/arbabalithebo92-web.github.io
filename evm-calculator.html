@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EVM & S-Curve Calculator</title>
+<meta name="description" content="Free Earned Value Management (EVM) and S-curve calculator: SPI, CPI, EAC, ETC, VAC and TCPI with a plain-English verdict for construction projects.">
+<style>
+:root{--navy:#0f2a4a;--orange:#f28c28;--bg:#f4f6f9;--card:#fff;--ink:#1d2733;--mute:#6b7785;--good:#1f9d55;--bad:#d64545;--warn:#d98a00;--pv:#2f6fdc;--ev:#1f9d55;--ac:#d64545}
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--navy);color:#fff;padding:18px 20px;border-bottom:4px solid var(--orange)}
+header h1{margin:0;font-size:22px}
+header p{margin:4px 0 0;color:#c9d4e3;font-size:14px}
+.wrap{max-width:1100px;margin:0 auto;padding:16px;display:grid;gap:16px;grid-template-columns:330px 1fr}
+@media(max-width:820px){.wrap{grid-template-columns:1fr}}
+.card{background:var(--card);border-radius:10px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.card h2{margin:0 0 12px;font-size:15px;color:var(--navy);text-transform:uppercase;letter-spacing:.5px}
+label{display:block;font-size:13px;color:var(--mute);margin:10px 0 4px}
+input,select{width:100%;padding:9px 10px;border:1px solid #cfd6df;border-radius:6px;font-size:15px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:12px;color:var(--mute);margin-top:4px}
+button{margin-top:14px;width:100%;padding:10px;border:0;border-radius:6px;background:var(--orange);color:#fff;font-weight:600;font-size:14px;cursor:pointer}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{border:1px solid #e3e8ee;border-radius:8px;padding:10px}
+.kpi .n{font-size:12px;color:var(--mute)}
+.kpi .v{font-size:22px;font-weight:700;margin-top:2px}
+.kpi .s{font-size:12px;margin-top:2px}
+.good{color:var(--good)}.bad{color:var(--bad)}.warn{color:var(--warn)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{padding:7px 6px;border-bottom:1px solid #eef1f5;text-align:left}
+th{color:var(--mute);font-weight:600;font-size:12px}
+td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.verdict{border-left:4px solid var(--orange);background:#fff7ee;padding:10px 12px;border-radius:6px;font-size:14px;line-height:1.5}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--mute);margin-top:6px;flex-wrap:wrap}
+.legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:5px}
+svg{width:100%;height:auto}
+footer{text-align:center;color:var(--mute);font-size:12px;padding:10px 0 24px}
+.main{display:grid;gap:16px}
+</style>
+</head>
+<body>
+<header>
+<h1>EVM &amp; S-Curve Calculator</h1>
+<p>Enter four numbers. Get SPI, CPI, forecasts and a plain-English verdict.</p>
+</header>
+<div class="wrap">
+<div class="card">
+<h2>Inputs</h2>
+<label>Currency / unit</label>
+<select id="cur"><option value="₹ Cr">₹ Cr</option><option value="£">£</option><option value="$">$</option><option value="Rs">Rs</option><option value="AED">AED</option></select>
+<label>BAC: Budget at Completion</label>
+<input id="bac" type="number" step="any" value="10">
+<div class="row">
+<div><label>Total duration (weeks)</label><input id="dur" type="number" step="any" value="100"></div>
+<div><label>Status week</label><input id="wk" type="number" step="any" value="50"></div>
+</div>
+<label>PV: Planned Value (budgeted cost of work planned to date)</label>
+<input id="pv" type="number" step="any" value="5">
+<label>EV: Earned Value (budgeted cost of work actually done)</label>
+<input id="ev" type="number" step="any" value="4">
+<div class="hint">EV = BAC × % complete</div>
+<label>AC: Actual Cost to date</label>
+<input id="ac" type="number" step="any" value="4.8">
+<button id="go">Calculate</button>
+<button id="ex" style="background:var(--navy)">Load worked example</button>
+</div>
+
+<div class="main">
+<div class="card">
+<h2>Performance</h2>
+<div class="kpis" id="kpis"></div>
+</div>
+<div class="card">
+<h2>Verdict</h2>
+<div class="verdict" id="verdict"></div>
+</div>
+<div class="card">
+<h2>S-Curve</h2>
+<svg id="chart" viewBox="0 0 640 320"></svg>
+<div class="legend"><span><i style="background:var(--pv)"></i>PV planned</span><span><i style="background:var(--ev)"></i>EV earned</span><span><i style="background:var(--ac)"></i>AC actual</span><span><i style="background:#999;height:0;border-top:2px dashed #999"></i>AC forecast (EAC)</span></div>
+</div>
+<div class="card">
+<h2>Forecasts</h2>
+<table id="fc"></table>
+<div class="hint" style="margin-top:8px">EAC method choice: use BAC/CPI if the cost trend will continue; AC+(BAC−EV) if the overrun was one-off; the CPI×SPI method if late work will also cost more (e.g. acceleration).</div>
+</div>
+</div>
+</div>
+<footer>EVM calculator · Arbab Ali Thebo, Senior QS</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+function f(x,d=2){return isFinite(x)?Number(x).toLocaleString('en-GB',{minimumFractionDigits:d,maximumFractionDigits:d}):'–'}
+function money(x){const c=$('cur').value;if(!isFinite(x))return'–';const n=x<0?'−':'',a=Math.abs(x);return c==='₹ Cr'?n+'₹'+f(a)+' Cr':n+c+' '+f(a)}
+function S(x){const k=10,a=1/(1+Math.exp(k*.5)),b=1/(1+Math.exp(-k*.5));x=Math.max(0,Math.min(1,x));return(1/(1+Math.exp(-k*(x-.5)))-a)/(b-a)}
+function calc(){
+ const BAC=+$('bac').value,PV=+$('pv').value,EV=+$('ev').value,AC=+$('ac').value,T=+$('dur').value,W=+$('wk').value;
+ const SV=EV-PV,CV=EV-AC,SPI=EV/PV,CPI=EV/AC;
+ const EAC1=BAC/CPI,EAC2=AC+(BAC-EV),EAC3=AC+(BAC-EV)/(CPI*SPI);
+ const ETC=EAC1-AC,VAC=BAC-EAC1,TCPI=(BAC-EV)/(BAC-AC),TCPIe=(BAC-EV)/(EAC1-AC);
+ const finish=T/SPI, pc=EV/BAC*100, spent=AC/BAC*100;
+ const cls=v=>v>=1?'good':v>=.9?'warn':'bad';
+ $('kpis').innerHTML=[
+  ['SPI (EV/PV)',f(SPI),SPI>=1?'On / ahead of schedule':'Behind schedule',cls(SPI)],
+  ['CPI (EV/AC)',f(CPI),CPI>=1?'On / under budget':'Over budget',cls(CPI)],
+  ['SV (EV−PV)',money(SV),SV<0?'Schedule gap':'Ahead',SV<0?'bad':'good'],
+  ['CV (EV−AC)',money(CV),CV<0?'Cost overrun so far':'Saving so far',CV<0?'bad':'good'],
+  ['% complete',f(pc,1)+'%','Budget spent: '+f(spent,1)+'%',pc>=spent?'good':'bad'],
+  ['Forecast finish',f(finish,0)+' wks','Plan: '+f(T,0)+' wks',finish<=T?'good':'bad']
+ ].map(k=>`<div class="kpi"><div class="n">${k[0]}</div><div class="v ${k[3]}">${k[1]}</div><div class="s ${k[3]}">${k[2]}</div></div>`).join('');
+ $('fc').innerHTML=`<tr><th>Measure</th><th>Formula</th><th style="text-align:right">Value</th></tr>
+ <tr><td>EAC (typical)</td><td>BAC / CPI</td><td class="num">${money(EAC1)}</td></tr>
+ <tr><td>EAC (one-off overrun)</td><td>AC + (BAC − EV)</td><td class="num">${money(EAC2)}</td></tr>
+ <tr><td>EAC (cost + schedule)</td><td>AC + (BAC − EV)/(CPI×SPI)</td><td class="num">${money(EAC3)}</td></tr>
+ <tr><td>ETC</td><td>EAC − AC</td><td class="num">${money(ETC)}</td></tr>
+ <tr><td>VAC</td><td>BAC − EAC</td><td class="num ${VAC<0?'bad':'good'}">${money(VAC)}</td></tr>
+ <tr><td>TCPI (to hit BAC)</td><td>(BAC − EV)/(BAC − AC)</td><td class="num ${TCPI>1.1?'bad':TCPI>1?'warn':'good'}">${f(TCPI)}</td></tr>
+ <tr><td>TCPI (to hit EAC)</td><td>(BAC − EV)/(EAC − AC)</td><td class="num">${f(TCPIe)}</td></tr>`;
+ let v=`At week ${f(W,0)} the job is <b>${f(pc,1)}% complete</b> against ${f(PV/BAC*100,1)}% planned, `;
+ v+=SPI<1?`so it is <b class="bad">behind schedule</b> (SPI ${f(SPI)}). At this pace it finishes around <b>week ${f(finish,0)}</b>. `:`so it is <b class="good">on or ahead of schedule</b> (SPI ${f(SPI)}). `;
+ v+=CPI<1?`Every ${$('cur').value==='₹ Cr'?'₹1':'1 unit'} spent is earning only ${f(CPI)} of value (CPI), so it is <b class="bad">over budget</b>. If nothing changes the final cost is about <b>${money(EAC1)}</b>, an overrun of <b>${money(-VAC)}</b>. `:`Cost performance is healthy (CPI ${f(CPI)}); forecast final cost ${money(EAC1)}. `;
+ if(CPI<1)v+=TCPI>1.1?`To still finish on the original budget the remaining work needs a CPI of ${f(TCPI)}, which is rarely achievable, so <b>re-baseline or recover scope/cost now</b>.`:`Recovering to budget needs a CPI of ${f(TCPI)} on the remaining work, which is tight but possible.`;
+ $('verdict').innerHTML=v;
+ draw(BAC,PV,EV,AC,T,W,EAC1,finish);
+}
+function draw(BAC,PV,EV,AC,T,W,EAC,fin){
+ const svg=$('chart'),L=50,R=620,Tp=15,B=285;
+ const xMax=Math.max(T,fin)*1.02,yMax=Math.max(BAC,EAC)*1.08;
+ const X=t=>L+(R-L)*t/xMax,Y=v=>B-(B-Tp)*v/yMax;
+ let s='';
+ for(let i=0;i<=5;i++){const v=yMax*i/5;s+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#eef1f5"/><text x="${L-6}" y="${Y(v)+4}" font-size="10" text-anchor="end" fill="#6b7785">${f(v,1)}</text>`}
+ for(let i=0;i<=5;i++){const t=xMax*i/5;s+=`<text x="${X(t)}" y="${B+16}" font-size="10" text-anchor="middle" fill="#6b7785">${f(t,0)}</text>`}
+ s+=`<text x="${(L+R)/2}" y="${B+30}" font-size="11" text-anchor="middle" fill="#6b7785">Weeks</text>`;
+ s+=`<line x1="${L}" x2="${R}" y1="${Y(BAC)}" y2="${Y(BAC)}" stroke="#2f6fdc" stroke-dasharray="3 3" opacity=".5"/><text x="${R}" y="${Y(BAC)-4}" font-size="10" text-anchor="end" fill="#2f6fdc">BAC</text>`;
+ const path=(fn,t0,t1)=>{let p='';for(let i=0;i<=60;i++){const t=t0+(t1-t0)*i/60;p+=(i?'L':'M')+X(t).toFixed(1)+','+Y(fn(t)).toFixed(1)}return p};
+ s+=`<path d="${path(t=>BAC*S(t/T),0,T)}" fill="none" stroke="#2f6fdc" stroke-width="2.5"/>`;
+ const sW=S(W/T)||1;
+ s+=`<path d="${path(t=>EV*S(t/T)/sW,0,W)}" fill="none" stroke="#1f9d55" stroke-width="2.5"/>`;
+ s+=`<path d="${path(t=>AC*S(t/T)/sW,0,W)}" fill="none" stroke="#d64545" stroke-width="2.5"/>`;
+ // forecast: AC -> EAC at forecast finish, following remaining S shape
+ const r=t=>{const x=(t-W)/(fin-W);return AC+(EAC-AC)*(S(.5+.5*x)-.5)/.5};
+ if(fin>W)s+=`<path d="${path(r,W,fin)}" fill="none" stroke="#999" stroke-width="2" stroke-dasharray="5 4"/><circle cx="${X(fin)}" cy="${Y(EAC)}" r="4" fill="#999"/><text x="${X(fin)-6}" y="${Y(EAC)-8}" font-size="10" text-anchor="end" fill="#555">EAC ${f(EAC,1)}</text>`;
+ s+=`<line x1="${X(W)}" x2="${X(W)}" y1="${Tp}" y2="${B}" stroke="#f28c28" stroke-dasharray="4 3"/><text x="${X(W)+4}" y="${Tp+10}" font-size="10" fill="#f28c28">Status wk ${f(W,0)}</text>`;
+ const pts=[[PV,'#2f6fdc','PV'],[EV,'#1f9d55','EV'],[AC,'#d64545','AC']].map(p=>({v:p[0],c:p[1],n:p[2],y:Y(p[0])})).sort((a,b)=>a.y-b.y);
+ let ly=-99;pts.forEach(p=>{p.ly=Math.max(p.y+4,ly+13);ly=p.ly});
+ pts.forEach(p=>{s+=`<circle cx="${X(W)}" cy="${p.y}" r="4.5" fill="${p.c}"/><text x="${X(W)-10}" y="${p.ly}" font-size="11" font-weight="600" text-anchor="end" fill="${p.c}">${p.n} ${f(p.v,1)}</text>`});
+ s+=`<line x1="${L}" x2="${L}" y1="${Tp}" y2="${B}" stroke="#9aa5b1"/><line x1="${L}" x2="${R}" y1="${B}" y2="${B}" stroke="#9aa5b1"/>`;
+ svg.innerHTML=s;
+}
+$('go').onclick=calc;
+document.querySelectorAll('input,select').forEach(e=>e.addEventListener('input',calc));
+$('ex').onclick=()=>{$('cur').value='₹ Cr';$('bac').value=10;$('dur').value=100;$('wk').value=50;$('pv').value=5;$('ev').value=4;$('ac').value=4.8;calc()};
+calc();
+</script>
+</body>
+</html>
