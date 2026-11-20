@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bid Comparison Tool</title>
+<meta name="description" content="Free bid comparison / bid levelling tool: normalise quotes for missing scope and risk, then score price and technical to find the best-value contractor.">
+<style>
+:root{--navy:#0f2a4a;--or:#f28c28;--bg:#f4f6f9;--ink:#1d2733;--mute:#6b7785;--good:#1f9d55;--bad:#d64545}
+*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--navy);color:#fff;padding:18px 20px;border-bottom:4px solid var(--or)}header h1{margin:0;font-size:22px}header p{margin:4px 0 0;color:#c9d4e3;font-size:14px}
+.wrap{max-width:1100px;margin:0 auto;padding:16px;display:grid;gap:16px}
+.card{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.08);overflow-x:auto}
+.card h2{margin:0 0 12px;font-size:15px;color:var(--navy);text-transform:uppercase;letter-spacing:.5px}
+.top{display:flex;gap:14px;flex-wrap:wrap;align-items:end}
+label{font-size:12px;color:var(--mute);display:block;margin-bottom:3px}
+input,select{padding:8px;border:1px solid #cfd6df;border-radius:6px;font-size:14px;width:100%}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:760px}th,td{padding:7px 6px;border-bottom:1px solid #eef1f5;text-align:left}
+th{font-size:12px;color:var(--mute);font-weight:600}td input{min-width:90px}
+.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+button{padding:9px 14px;border:0;border-radius:6px;background:var(--or);color:#fff;font-weight:600;cursor:pointer}button.s{background:var(--navy)}button.x{background:transparent;color:var(--bad);padding:4px 8px;font-size:18px}
+.win td{background:#eaf7ef}.rank1{color:var(--good)}
+.verdict{border-left:4px solid var(--or);background:#fff7ee;padding:10px 12px;border-radius:6px;font-size:14px;line-height:1.55}
+.bar{height:16px;border-radius:3px;display:inline-block;vertical-align:middle}
+.lg{font-size:12px;color:var(--mute);margin-top:6px}
+footer{text-align:center;color:var(--mute);font-size:12px;padding:6px 0 24px}
+</style></head><body>
+<header><h1>Bid Comparison Tool</h1><p>Compare quotes on the same scope, then score price + technical. The cheapest quote isn't always the best value.</p></header>
+<div class="wrap">
+<div class="card"><h2>Settings</h2><div class="top">
+<div><label>Currency</label><select id="cur"><option>£</option><option>$</option><option>AED</option><option>Rs</option><option>₹</option><option>SAR</option></select></div>
+<div><label>Price weight %</label><input id="wp" type="number" value="70" min="0" max="100"></div>
+<div><label>Technical weight %</label><input id="wt" type="number" value="30" readonly></div>
+<div><button class="s" id="ex">Load example</button></div>
+</div></div>
+
+<div class="card"><h2>Bids</h2>
+<table><thead><tr><th>Bidder</th><th>Quoted price</th><th>+ Missing scope (exclusions)</th><th>+ Risk / mitigation cost</th><th>Technical score (0–100)</th><th></th></tr></thead><tbody id="bids"></tbody></table>
+<div style="margin-top:10px"><button id="add">+ Add bid</button></div>
+<div class="lg">Missing scope = cost of items the bidder left out (e.g. steel, Building Control, VAT). Risk cost = your allowance for weak programme, low provisional sums, unclear terms. Technical score = capability, programme, past performance.</div>
+</div>
+
+<div class="card"><h2>Result</h2><table><thead><tr><th>Rank</th><th>Bidder</th><th class="num">Quoted</th><th class="num">Like-for-like price</th><th class="num">Price score</th><th class="num">Technical</th><th class="num">Weighted total</th><th>Quoted vs real</th></tr></thead><tbody id="res"></tbody></table></div>
+<div class="card"><h2>Recommendation</h2><div class="verdict" id="verdict"></div></div>
+</div>
+<footer>Bid Comparison Tool · Arbab Ali Thebo, Senior Quantity Surveyor (17+ yrs) · figures you enter stay in your browser</footer>
+<script>
+const $=id=>document.getElementById(id);
+let bids=[];
+function row(b,i){return `<tr><td><input value="${b.n}" data-i="${i}" data-k="n"></td><td><input type="number" step="any" value="${b.q}" data-i="${i}" data-k="q"></td><td><input type="number" step="any" value="${b.e}" data-i="${i}" data-k="e"></td><td><input type="number" step="any" value="${b.r}" data-i="${i}" data-k="r"></td><td><input type="number" min="0" max="100" value="${b.t}" data-i="${i}" data-k="t"></td><td><button class="x" data-del="${i}">×</button></td></tr>`}
+function draw(){$('bids').innerHTML=bids.map(row).join('');calc()}
+function f(x){return Number(x).toLocaleString('en-GB',{maximumFractionDigits:2})}
+function m(x){return $('cur').value+' '+f(x)}
+function calc(){
+ const wp=Math.min(100,Math.max(0,+$('wp').value||0));$('wt').value=100-wp;
+ const v=bids.filter(b=>+b.q>0).map(b=>({...b,adj:+b.q+(+b.e||0)+(+b.r||0)}));
+ if(!v.length){$('res').innerHTML='';$('verdict').innerHTML='Add at least one bid.';return}
+ const low=Math.min(...v.map(b=>b.adj)),maxAdj=Math.max(...v.map(b=>b.adj)),cheapQ=v.reduce((a,b)=>+b.q<+a.q?b:a);
+ v.forEach(b=>{b.ps=low/b.adj*100;b.tot=b.ps*wp/100+(+b.t||0)*(100-wp)/100});
+ const s=[...v].sort((a,b)=>b.tot-a.tot);
+ $('res').innerHTML=s.map((b,i)=>`<tr class="${i?'':'win'}"><td class="${i?'':'rank1'}"><b>${i+1}</b></td><td>${b.n}</td><td class="num">${m(b.q)}</td><td class="num">${m(b.adj)}</td><td class="num">${f(b.ps)}</td><td class="num">${f(+b.t||0)}</td><td class="num">${f(b.tot)}</td><td><span class="bar" style="width:${b.q/maxAdj*140}px;background:#9fb4cf"></span><br><span class="bar" style="width:${b.adj/maxAdj*140}px;background:${b.adj>b.q?'#f28c28':'#1f9d55'}"></span></td></tr>`).join('');
+ const w=s[0];let t=`<b>Recommended: ${w.n}</b>, with a weighted score of ${f(w.tot)} (price ${wp}% / technical ${100-wp}%). Like-for-like price: ${m(w.adj)}.<br>`;
+ if(cheapQ.n!==w.n)t+=`<b>${cheapQ.n}</b> looked cheapest at ${m(cheapQ.q)}, but once missing scope and risk are added it's really <b>${m(cheapQ.adj)}</b> (+${m(cheapQ.adj-cheapQ.q)}).<br>`;
+ else t+=`The cheapest quote is also the best value here, which is good, but still confirm the exclusions in writing.<br>`;
+ t+=`Before awarding: confirm scope, exclusions, payment terms and programme in writing, and ask every bidder to re-quote on the same list.`;
+ $('verdict').innerHTML=t;
+}
+document.addEventListener('input',e=>{const i=e.target.dataset.i;if(i!==undefined){bids[i][e.target.dataset.k]=e.target.value;calc()}else calc()});
+document.addEventListener('click',e=>{if(e.target.dataset.del!==undefined){bids.splice(+e.target.dataset.del,1);draw()}});
+$('add').onclick=()=>{bids.push({n:'Bidder '+String.fromCharCode(65+bids.length),q:'',e:0,r:0,t:70});draw()};
+$('ex').onclick=()=>{$('cur').value='£';$('wp').value=70;bids=[{n:'Builder A',q:38500,e:9300,r:0,t:60},{n:'Builder B',q:46200,e:2650,r:0,t:80},{n:'Builder C',q:52800,e:0,r:0,t:85}];draw()};
+$('ex').onclick();
+</script></body></html>
