@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Muck-Away & Haulage Calculator | Arbab Ali Thebo</title>
+<meta name="description" content="Free UK muck-away calculator: excavated volume to bulked volume, tonnes, lorry loads and haulage cost. For groundworks estimators.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Archivo+Narrow:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#e6e3dc,#1e1e1c);--card:light-dark(#f4f2ed,#2a2a27);--ink:light-dark(#1d1d1b,#ecebe6);--mute:light-dark(#5d5b55,#a9a79f);--line:light-dark(#cfcbc1,#3d3c38);--acc:#ffc61a;--soil:light-dark(#8a6a45,#a5825a)}
+*{box-sizing:border-box;min-width:0}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Archivo,system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(22px,4vw,48px) max(5vw,16px);max-width:1100px;margin:0 auto}
+h1{font:800 clamp(30px,6vw,48px)/1.05 Archivo;margin:0 0 6px;text-wrap:balance}
+.lead{color:var(--mute);margin:0 0 22px;max-width:62ch}
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px}
+@media(max-width:720px){.hero{grid-template-columns:minmax(0,1fr)}}
+.res{background:var(--ink);color:var(--bg);border-radius:18px;padding:24px 26px;display:flex;flex-direction:column;gap:12px}
+.big{font:800 clamp(44px,10vw,78px)/1 Archivo;white-space:nowrap}
+.big span{font-size:.34em;font-weight:600;opacity:.8;margin-left:6px}
+.cost{font:700 clamp(30px,6vw,44px)/1 'Archivo Narrow';color:var(--acc)}
+.cost small{display:block;font:600 14px/1.4 Archivo;color:inherit;opacity:.75;margin-top:4px}
+.rows{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.rows div{border-top:2px solid rgba(128,128,128,.35);padding-top:8px;font-size:14px}
+.rows b{display:block;font:700 21px/1.2 'Archivo Narrow';white-space:nowrap}
+.why{font-size:14px;background:rgba(255,198,26,.15);border-left:4px solid var(--acc);padding:8px 12px;border-radius:6px}
+.pic{background:var(--card);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.trucks{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;min-height:120px}
+.trucks svg{width:46px;height:30px}
+.more{font:700 16px 'Archivo Narrow';align-self:center}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:22px;background:var(--card);border-radius:18px;padding:20px}
+label{display:block;font-weight:600;font-size:14px;margin:0 0 6px}
+input,select{width:100%;min-height:44px;font:16px Archivo;padding:8px 10px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.dims{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.hint{font-size:13px;color:var(--mute);margin-top:6px}
+.f{margin-top:10px}
+h2{font:800 24px/1.2 Archivo;margin:0 0 6px}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:15px}
+th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+.scroll{overflow-x:auto}
+.notes{color:var(--mute);font-size:15px;max-width:72ch}.notes li{margin:4px 0}
+.cta{background:var(--card);border-radius:18px;padding:22px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+.cta p{margin:0;max-width:60ch}
+.btn{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:10px;background:var(--acc);color:#1d1d1b;font:700 15px Archivo;text-decoration:none;border:0;cursor:pointer}
+.foot{background:var(--acc);color:#1d1d1b}
+.foot .band{display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;align-items:center}
+.foot b{font:800 20px Archivo}
+.copy{min-height:44px;padding:0 16px;border-radius:10px;border:0;background:#1d1d1b;color:#ffc61a;font:700 15px Archivo;cursor:pointer}
+</style></head><body>
+<div class="band">
+<h1>Muck-away &amp; haulage calculator</h1>
+<p class="lead">Excavated volume in, lorry loads and haulage cost out. Checks both volume and weight, because on most UK sites the lorry hits its weight limit before it is full.</p>
+<div class="hero">
+ <div class="res" aria-live="polite">
+  <div class="big" id="loads">0<span>lorry loads</span></div>
+  <div class="cost" id="total">£0<small>total muck-away (haulage + tipping)</small></div>
+  <div class="rows">
+   <div>Loose volume<b id="loose">0 m³</b><span id="bank">from 0 m³ in ground</span></div>
+   <div>Weight<b id="tonnes">0 t</b><span id="dens">at 0 t/m³</span></div>
+   <div>Per m³ dug<b id="perm3">£0</b><span>all-in rate</span></div>
+  </div>
+  <div class="why" id="why"></div>
+ </div>
+ <div class="pic"><b>Each lorry = one load</b><div class="trucks" id="trucks" role="img" aria-label="Lorry loads drawn as icons"></div><div class="hint" id="split"></div></div>
+</div>
+
+<div class="ctl">
+ <div>
+  <label for="mode">Excavation from</label>
+  <select id="mode"><option value="vol">Volume directly (m³ in ground)</option><option value="dim">Length × width × depth</option></select>
+  <div id="volbox" class="f"><input id="vol" type="number" min="0" step="1" value="120" inputmode="decimal" aria-label="Volume in ground, m³"></div>
+  <div id="dimbox" class="f" hidden><div class="dims"><input id="L" type="number" value="20" step="0.1" aria-label="Length (m)"><input id="W" type="number" value="12" step="0.1" aria-label="Width (m)"><input id="D" type="number" value="0.5" step="0.05" aria-label="Depth (m)"></div><div class="hint">L, W, depth in metres</div></div>
+  <label for="soil" class="f">Material</label>
+  <select id="soil">
+   <option value="1.25|1.6">Topsoil (bulking 1.25, 1.6 t/m³)</option>
+   <option value="1.30|1.9" selected>Clay (bulking 1.30, 1.9 t/m³)</option>
+   <option value="1.15|1.8">Sand / gravel (bulking 1.15, 1.8 t/m³)</option>
+   <option value="1.20|2.0">Mixed made ground (bulking 1.20, 2.0 t/m³)</option>
+   <option value="1.50|2.4">Broken rock (bulking 1.50, 2.4 t/m³)</option>
+   <option value="custom">Custom…</option>
+  </select>
+  <div id="custbox" class="f dims" style="grid-template-columns:1fr 1fr" hidden><input id="bulk" type="number" step="0.05" value="1.3" aria-label="Bulking factor"><input id="den" type="number" step="0.1" value="1.9" aria-label="Density t/m³ in ground"></div>
+ </div>
+ <div>
+  <label for="truck">Lorry</label>
+  <select id="truck">
+   <option value="20|16" selected>8-wheel tipper (20 t / 16 m³)</option>
+   <option value="12|9">6-wheel tipper (12 t / 9 m³)</option>
+   <option value="28|25">Artic tipper (28 t / 25 m³)</option>
+   <option value="custom">Custom…</option>
+  </select>
+  <div id="tcust" class="f dims" style="grid-template-columns:1fr 1fr" hidden><input id="cap_t" type="number" step="1" value="20" aria-label="Payload tonnes"><input id="cap_m" type="number" step="1" value="16" aria-label="Body volume m³"></div>
+  <label for="rate" class="f">Haulage cost per load (£)</label>
+  <input id="rate" type="number" min="0" step="5" value="95">
+  <div class="hint">Example figure. Use your haulier's rate.</div>
+ </div>
+ <div>
+  <label for="tip">Tipping charge per tonne (£)</label>
+  <input id="tip" type="number" min="0" step="0.5" value="0">
+  <div class="hint">Leave 0 if the haulier's price includes tipping. Inert vs non-inert and landfill tax change this a lot.</div>
+  <label for="wst" class="f">Extra % (over-dig, waiting, part loads)</label>
+  <input id="wst" type="number" min="0" max="30" step="1" value="5">
+ </div>
+</div>
+</div>
+
+<div class="band">
+<h2>Same dig, different lorries</h2>
+<div class="scroll"><table id="tab"><thead><tr><th>Lorry</th><th>Loads by volume</th><th>Loads by weight</th><th>Loads needed</th><th>Haulage £</th></tr></thead><tbody></tbody></table></div>
+<ul class="notes">
+ <li>Loose volume = volume in ground × bulking factor. Weight = volume in ground × density.</li>
+ <li>Loads needed = the bigger of (loose volume ÷ body volume) and (tonnes ÷ payload), rounded up.</li>
+ <li>All rates and factors here are typical examples for estimating only. Check your haulier, tip and site investigation.</li>
+</ul>
+</div>
+
+<div class="band"><div class="cta">
+ <p><b>Not sure how much will actually come off site?</b> Cut and fill on a sloping plot is where the real muck-away cost hides. Send me the site location and drawings and I'll do a free one-page earthworks check from LiDAR data.</p>
+ <a class="btn" href="earthworks-check.html">Free earthworks check →</a>
+</div></div>
+
+<div class="foot"><div class="band"><div><b>Free tool by Arbab Ali Thebo</b><br>Senior Surveyor &amp; Quantity Surveyor · takeoffs, BOQs, earthworks · WhatsApp +92 344 5612046 · arbabalithebo92@gmail.com</div><button class="copy" id="cp">Copy result</button></div></div>
+<script>
+{
+const $=id=>document.getElementById(id);
+const gbp=n=>'£'+Math.round(n).toLocaleString('en-GB');
+const f=(n,d=1)=>n.toLocaleString('en-GB',{maximumFractionDigits:d,minimumFractionDigits:d});
+const TR=[['8-wheel tipper',20,16],['6-wheel tipper',12,9],['Artic tipper',28,25]];
+function soil(){const v=$('soil').value;if(v==='custom')return[+$('bulk').value||1,+$('den').value||1.8];return v.split('|').map(Number)}
+function truck(){const v=$('truck').value;if(v==='custom')return[+$('cap_t').value||20,+$('cap_m').value||14];return v.split('|').map(Number)}
+function vol(){let v=$('mode').value==='dim'?(+$('L').value||0)*(+$('W').value||0)*(+$('D').value||0):(+$('vol').value||0);return v*(1+(+$('wst').value||0)/100)}
+function calc(bank,b,d,ct,cm,rate,tip){const loose=bank*b,t=bank*d,lv=loose/cm,lw=t/ct,n=Math.ceil(Math.max(lv,lw)-1e-9);return{loose,t,lv,lw,n,haul:n*rate,tipc:t*tip}}
+function update(){
+ const bank=vol(),[b,d]=soil(),[ct,cm]=truck(),rate=+$('rate').value||0,tip=+$('tip').value||0;
+ const r=calc(bank,b,d,ct,cm,rate,tip),tot=r.haul+r.tipc;
+ $('loads').innerHTML=`${r.n}<span>lorry load${r.n===1?'':'s'}</span>`;
+ $('total').innerHTML=`${gbp(tot)}<small>total muck-away (haulage ${gbp(r.haul)}${tip?` + tipping ${gbp(r.tipc)}`:''})</small>`;
+ $('loose').textContent=f(r.loose)+' m³';$('bank').textContent='from '+f(bank)+' m³ in ground';
+ $('tonnes').textContent=f(r.t,0)+' t';$('dens').textContent='at '+f(d)+' t/m³';
+ $('perm3').textContent=bank?'£'+f(tot/bank,2):'£0';
+ const wt=r.lw>=r.lv;
+ $('why').textContent=bank?(wt?(Math.ceil(r.lv)<r.n?`Weight decides: each lorry is full at ${ct} t before its ${cm} m³ body is full. Counting by volume alone gives ${Math.ceil(r.lv)} loads, ${r.n-Math.ceil(r.lv)} short.`:`Weight and volume both need ${r.n} loads here, with weight slightly tighter.`):`Volume decides: the ${cm} m³ body fills before the ${ct} t limit.`):'';
+ const show=Math.min(r.n,40);let s='';for(let i=0;i<show;i++)s+=`<svg viewBox="0 0 46 30" aria-hidden="true"><rect x="2" y="6" width="26" height="14" rx="2" fill="var(--soil)"/><path d="M2 6 L28 6 L24 2 L6 2Z" fill="var(--soil)" opacity=".7"/><rect x="30" y="9" width="12" height="11" rx="2" fill="currentColor" opacity=".75"/><circle cx="10" cy="24" r="4" fill="currentColor"/><circle cx="36" cy="24" r="4" fill="currentColor"/></svg>`;
+ if(r.n>40)s+=`<span class="more">+${r.n-40} more</span>`;$('trucks').innerHTML=s;$('trucks').style.color='var(--ink)';
+ $('split').textContent=`${f(r.lv)} loads by volume · ${f(r.lw)} loads by weight → ${r.n} needed`;
+ $('tab').tBodies[0].innerHTML=TR.map(([n,t,m])=>{const x=calc(bank,b,d,t,m,rate,tip);return`<tr><td>${n} (${t} t / ${m} m³)</td><td>${f(x.lv)}</td><td>${f(x.lw)}</td><td><b>${x.n}</b></td><td>${gbp(x.haul)}</td></tr>`}).join('');
+}
+['vol','L','W','D','bulk','den','cap_t','cap_m','rate','tip','wst'].forEach(id=>$(id).addEventListener('input',update));
+$('mode').addEventListener('change',()=>{const dm=$('mode').value==='dim';$('dimbox').hidden=!dm;$('volbox').hidden=dm;update()});
+$('soil').addEventListener('change',()=>{$('custbox').hidden=$('soil').value!=='custom';update()});
+$('truck').addEventListener('change',()=>{$('tcust').hidden=$('truck').value!=='custom';update()});
+$('cp').addEventListener('click',async()=>{const t=`Muck-away: ${$('loose').textContent} loose, ${$('tonnes').textContent}, ${$('loads').innerText.replace(/\n/g,' ')}, ${$('total').firstChild.textContent} (calculator: arbabalithebo92-web.github.io/muck-away.html)`;try{await navigator.clipboard.writeText(t);$('cp').textContent='Copied'}catch(e){$('cp').textContent='Copy blocked'}setTimeout(()=>$('cp').textContent='Copy result',1500)});
+update();
+}
+</script></body></html>
