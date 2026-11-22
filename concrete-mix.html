@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Concrete Mix Calculator | Arbab Ali Thebo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Archivo+Narrow:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#e6e3dc,#1e1e1c);--card:light-dark(#f4f2ed,#2a2a27);--ink:light-dark(#1d1d1b,#ecebe6);--mute:light-dark(#5d5b55,#a9a79f);--line:light-dark(#cfcbc1,#3d3c38);--acc:#ffc61a;--c1:light-dark(#6f6d68,#9a978f);--c2:light-dark(#d3b07a,#b8955f);--c3:light-dark(#8b8f93,#6d7175)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Archivo,system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(22px,4vw,48px) max(5vw,16px);max-width:1100px;margin:0 auto}
+h1{font:800 clamp(30px,6vw,48px)/1.05 Archivo;margin:0 0 6px;text-wrap:balance}
+.lead{color:var(--mute);margin:0 0 22px;max-width:60ch}
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px;align-items:stretch}
+@media(max-width:700px){.hero{grid-template-columns:minmax(0,1fr)}}
+.res{background:var(--ink);color:var(--bg);border-radius:18px;padding:24px 26px;display:flex;flex-direction:column;gap:10px}
+.ratio{font:700 clamp(36px,8vw,60px)/1 'Archivo Narrow';color:var(--acc);white-space:nowrap}
+.ratio small{display:block;font:600 15px/1.4 Archivo;color:inherit;opacity:.75;margin-top:6px;white-space:normal}
+.big{font:800 clamp(44px,10vw,78px)/1 Archivo;white-space:nowrap}
+.big span{font-size:.36em;font-weight:600;opacity:.8;margin-left:6px}
+.rows{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:6px}
+.rows div{border-top:2px solid rgba(255,255,255,.18);padding-top:8px;font-size:14px;opacity:.9}
+:root[data-theme=light] .rows div{border-color:rgba(255,255,255,.18)}
+.rows b{display:block;font:700 22px/1.2 'Archivo Narrow';white-space:nowrap;opacity:1}
+.pour{background:var(--card);border-radius:18px;padding:18px;display:flex;flex-direction:column}
+.fig{position:relative;flex:1;min-height:260px}.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+.leg{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px;color:var(--mute);margin-top:8px}
+.leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:22px;background:var(--card);border-radius:18px;padding:20px}
+label{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{flex:1 0 60px;min-height:44px;border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;font:700 16px Archivo;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:#1d1d1b}
+input,select{width:100%;min-height:44px;font:16px Archivo;padding:8px 10px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.dims{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.hint{font-size:13px;color:var(--mute);margin-top:6px}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:15px}
+th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+tr.on td{background:color-mix(in srgb,var(--acc) 28%,transparent);font-weight:700}
+h2{font:800 24px/1.2 Archivo;margin:0 0 6px}
+.notes{color:var(--mute);font-size:15px;max-width:70ch}.notes li{margin:4px 0}
+.foot{background:var(--acc);color:#1d1d1b}
+.foot .band{display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;align-items:center}
+.foot b{font:800 20px Archivo}
+.copy{min-height:44px;padding:0 16px;border-radius:10px;border:0;background:#1d1d1b;color:#ffc61a;font:700 15px Archivo;cursor:pointer}
+.scroll{overflow-x:auto}
+@media(prefers-reduced-motion:no-preference){.layer{transition:height .35s ease,y .35s ease}}
+</style></head><body>
+<div class="band">
+<h1>Concrete mix calculator</h1>
+<p class="lead">Pick the grade, enter the volume. Get cement bags, sand, aggregate and water for nominal mixes M10 to M25.</p>
+<div class="hero">
+ <div class="res" aria-live="polite">
+  <div class="ratio" id="ratio">1 : 1.5 : 3<small id="rsub">M20 · cement : sand : aggregate</small></div>
+  <div class="big" id="bags">8.1<span>bags of cement (50 kg)</span></div>
+  <div class="rows">
+   <div>Sand<b id="sand">0.42 m³</b><span id="sandc">14.7 cft</span></div>
+   <div>Aggregate<b id="agg">0.84 m³</b><span id="aggc">29.4 cft</span></div>
+   <div>Water<b id="wat">201 L</b><span id="wc">w/c 0.50</span></div>
+  </div>
+ </div>
+ <div class="pour"><div class="fig"><svg id="pic" role="img" aria-label="Mix proportions drawn as layers"></svg></div>
+  <div class="leg"><span><i style="background:var(--c1)"></i>Cement</span><span><i style="background:var(--c2)"></i>Sand</span><span><i style="background:var(--c3)"></i>Aggregate</span></div></div>
+</div>
+<div class="ctl">
+ <div><label>Grade</label><div class="seg" id="grades"></div><div class="hint" id="gnote"></div></div>
+ <div><label for="mode">Volume from</label><select id="mode"><option value="vol">Volume directly</option><option value="dim">Length × width × thickness</option></select>
+  <div id="volbox" style="margin-top:8px"><div class="dims" style="grid-template-columns:minmax(0,2fr) minmax(0,1fr)"><input id="vol" type="number" min="0" step="0.1" value="1" inputmode="decimal" aria-label="Volume"><select id="unit" aria-label="Unit"><option value="m3">m³</option><option value="cft">cft</option></select></div></div>
+  <div id="dimbox" style="margin-top:8px" hidden><div class="dims"><input id="L" type="number" value="5" step="0.1" aria-label="Length (m)"><input id="B" type="number" value="4" step="0.1" aria-label="Width (m)"><input id="T" type="number" value="0.125" step="0.005" aria-label="Thickness (m)"></div><div class="hint">L, W, thickness in metres · <span id="dimv"></span></div></div>
+ </div>
+ <div><label for="wcr">Water–cement ratio</label><input id="wcr" type="number" min="0.35" max="0.7" step="0.05" value="0.5"><label for="wst" style="margin-top:10px">Wastage %</label><input id="wst" type="number" min="0" max="15" step="1" value="0"></div>
+</div>
+</div>
+<div class="band">
+<h2>Nominal mix table (per 1 m³ wet concrete)</h2>
+<div class="scroll"><table id="tab"><thead><tr><th>Grade</th><th>Ratio</th><th>Cement bags</th><th>Sand m³</th><th>Aggregate m³</th></tr></thead><tbody></tbody></table></div>
+<ul class="notes">
+ <li>Dry volume = wet volume × 1.54 (allows for voids and shrinkage). Cement density 1440 kg/m³, 1 bag = 50 kg.</li>
+ <li>1 m³ = 35.31 cft. Sand and aggregate are loose dry volumes; add bulking for damp sand on site.</li>
+ <li>IS 456 allows nominal mix up to M20. For M25 and above use a design mix from a lab; the 1:1:2 here is for rough estimates only.</li>
+</ul>
+</div>
+<div class="foot"><div class="band"><div><b>Free tool by Arbab Ali Thebo</b><br>Surveyor &amp; Quantity Surveyor · BOQ, BBS, earthworks · WhatsApp +92 344 5612046</div><button class="copy" id="cp">Copy result</button></div></div>
+<script>
+{
+const G=[{g:'M10',r:[1,3,6]},{g:'M15',r:[1,2,4]},{g:'M20',r:[1,1.5,3]},{g:'M25',r:[1,1,2]}];
+let cur=2;const $=id=>document.getElementById(id);
+const f=(n,d=2)=>n.toLocaleString('en-GB',{maximumFractionDigits:d,minimumFractionDigits:d});
+function calc(r,v){const dry=v*1.54,s=r[0]+r[1]+r[2];const c=dry*r[0]/s,sa=dry*r[1]/s,ag=dry*r[2]/s;const kg=c*1440;return{bags:kg/50,kg,sa,ag}}
+function vol(){let v;if($('mode').value==='dim'){v=(+$('L').value||0)*(+$('B').value||0)*(+$('T').value||0);$('dimv').textContent=f(v,3)+' m³'}else{v=+$('vol').value||0;if($('unit').value==='cft')v/=35.3147}return v*(1+(+$('wst').value||0)/100)}
+function draw(){const s=$('pic'),W=s.clientWidth,H=s.clientHeight;if(!W)return;const r=G[cur].r,t=r[0]+r[1]+r[2];
+ const bw=Math.min(W*0.5,220),x=(W-bw)/2,top=18,base=H-22,h=base-top;let y=base;const cols=['var(--c1)','var(--c2)','var(--c3)'],nm=['Cement','Sand','Aggregate'];let out='';
+ const parts=[2,1,0].map(i=>{const hh=h*r[i]/t;y-=hh;return{i,y,hh}});
+ out+=`<ellipse cx="${W/2}" cy="${base+6}" rx="${bw*0.62}" ry="9" fill="currentColor" opacity=".12"/>`;
+ parts.forEach(p=>{out+=`<rect class="layer" x="${x}" y="${p.y}" width="${bw}" height="${p.hh}" fill="${cols[p.i]}"/>`;
+  if(p.i>0){for(let k=0;k<Math.floor(p.hh*bw/(p.i===2?380:160));k++){const px=x+6+((k*53)%(bw-12)),py=p.y+4+((k*29)%Math.max(4,p.hh-8));out+=p.i===2?`<circle cx="${px}" cy="${py}" r="${3+(k%3)}" fill="#000" opacity=".18"/>`:`<circle cx="${px}" cy="${py}" r="1.3" fill="#fff" opacity=".35"/>`}}
+  const lx=W>380?x+bw+12:x+8,anc='start',txt=`${nm[p.i]} ${r[p.i]}`;
+  if(p.hh>18)out+=`<text x="${lx}" y="${p.y+p.hh/2+5}" font-size="14" font-weight="700" fill="${W>380?'currentColor':'#fff'}" text-anchor="${anc}">${txt}</text>`});
+ out+=`<rect x="${x}" y="${top}" width="${bw}" height="${h}" fill="none" stroke="currentColor" stroke-opacity=".35" stroke-width="2"/>`;
+ s.style.color='var(--ink)';s.innerHTML=out}
+const ro=new ResizeObserver(draw);ro.observe($('pic'));
+function update(){const gr=G[cur],v=vol(),c=calc(gr.r,v),wcr=+$('wcr').value||0.5;
+ $('ratio').innerHTML=`${gr.r.join(' : ')}<small>${gr.g} · cement : sand : aggregate · for ${f(v,2)} m³</small>`;
+ $('bags').innerHTML=`${f(c.bags,1)}<span>bags of cement (50 kg)</span>`;
+ $('sand').textContent=f(c.sa)+' m³';$('sandc').textContent=f(c.sa*35.3147,1)+' cft';
+ $('agg').textContent=f(c.ag)+' m³';$('aggc').textContent=f(c.ag*35.3147,1)+' cft';
+ $('wat').textContent=Math.round(c.kg*wcr)+' L';$('wc').textContent='w/c '+wcr.toFixed(2);
+ $('gnote').textContent=gr.g==='M25'?'M25: use a lab design mix for real work':'Nominal mix (IS 456)';
+ document.querySelectorAll('#grades button').forEach((b,i)=>b.setAttribute('aria-pressed',i===cur));
+ document.querySelectorAll('#tab tbody tr').forEach((tr,i)=>tr.className=i===cur?'on':'');draw();
+ try{localStorage.setItem('mixg',cur)}catch(e){}}
+$('grades').innerHTML=G.map((x,i)=>`<button type="button" data-i="${i}">${x.g}</button>`).join('');
+$('tab').tBodies[0].innerHTML=G.map(x=>{const c=calc(x.r,1);return`<tr><td>${x.g}</td><td>${x.r.join(':')}</td><td>${f(c.bags,1)}</td><td>${f(c.sa)}</td><td>${f(c.ag)}</td></tr>`}).join('');
+$('grades').addEventListener('click',e=>{const b=e.target.closest('button');if(b){cur=+b.dataset.i;update()}});
+['vol','unit','L','B','T','wcr','wst'].forEach(id=>$(id).addEventListener('input',update));
+$('mode').addEventListener('change',()=>{const d=$('mode').value==='dim';$('dimbox').hidden=!d;$('volbox').hidden=d;update()});
+$('cp').addEventListener('click',async()=>{const gr=G[cur],v=vol(),c=calc(gr.r,v);const t=`${gr.g} (${gr.r.join(':')}) for ${f(v)} m³: cement ${f(c.bags,1)} bags, sand ${f(c.sa)} m³, aggregate ${f(c.ag)} m³`;
+ try{await navigator.clipboard.writeText(t);$('cp').textContent='Copied'}catch(e){$('cp').textContent='Copy blocked'}setTimeout(()=>$('cp').textContent='Copy result',1500)});
+try{const s=localStorage.getItem('mixg');if(s!==null)cur=+s}catch(e){}
+update();
+}
+</script></body></html>
