@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stirrup Calculator: Number, Cutting Length & Weight | Arbab Ali Thebo</title>
+<meta name="description" content="Free stirrup calculator for beams: number of stirrups with closer spacing near supports, cutting length and steel weight.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Archivo+Narrow:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#e6e3dc,#1e1e1c);--card:light-dark(#f4f2ed,#2a2a27);--ink:light-dark(#1d1d1b,#ecebe6);--mute:light-dark(#5d5b55,#a9a79f);--line:light-dark(#cfcbc1,#3d3c38);--acc:#ffc61a;--z1:#e4572e;--z2:light-dark(#2e6fd8,#6b9ef0);--conc:light-dark(#c9c4b8,#4a4843)}
+*{box-sizing:border-box;min-width:0}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Archivo,system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(22px,4vw,44px) max(5vw,16px);max-width:1100px;margin:0 auto}
+h1{font:800 clamp(28px,6vw,46px)/1.05 Archivo;margin:0 0 6px;text-wrap:balance}
+.lead{color:var(--mute);margin:0 0 20px;max-width:64ch}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:20px}
+@media(max-width:760px){.hero{grid-template-columns:minmax(0,1fr)}}
+.res{background:var(--ink);color:var(--bg);border-radius:18px;padding:22px 24px;display:flex;flex-direction:column;gap:12px}
+.big{font:800 clamp(48px,11vw,80px)/1 Archivo;white-space:nowrap}.big span{font-size:.32em;font-weight:600;opacity:.8;margin-left:6px}
+.rows{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.rows div{border-top:2px solid rgba(128,128,128,.35);padding-top:8px;font-size:14px}
+.rows b{display:block;font:700 21px/1.2 'Archivo Narrow';white-space:nowrap}
+.why{font-size:14px;background:rgba(255,198,26,.15);border-left:4px solid var(--acc);padding:8px 12px;border-radius:6px}
+.pic{background:var(--card);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.pic svg{width:100%;height:auto;color:var(--ink)}
+.leg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--mute)}.leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:20px;background:var(--card);border-radius:18px;padding:20px}
+label{display:block;font-weight:600;font-size:14px;margin:0 0 6px}
+input,select{width:100%;min-height:44px;font:16px Archivo;padding:8px 10px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.f{margin-top:10px}
+.hint{font-size:13px;color:var(--mute);margin-top:6px}
+h2{font:800 22px/1.2 Archivo;margin:0 0 6px}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:15px}
+th,td{padding:8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}th:first-child,td:first-child{text-align:left}
+.scroll{overflow-x:auto}.notes{color:var(--mute);font-size:15px;max-width:74ch}.notes li{margin:4px 0}
+.foot{background:var(--acc);color:#1d1d1b}.foot .band{display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;align-items:center}.foot b{font:800 20px Archivo}
+.copy{min-height:44px;padding:0 16px;border-radius:10px;border:0;background:#1d1d1b;color:#ffc61a;font:700 15px Archivo;cursor:pointer}
+</style></head><body>
+<div class="band">
+<h1>Stirrup calculator for beams</h1>
+<p class="lead">Number of stirrups with closer spacing near the supports, cutting length and total steel weight. Most designs use tighter stirrups at the ends, so one spacing for the whole beam gives the wrong count.</p>
+<div class="hero">
+ <div class="res" aria-live="polite">
+  <div class="big" id="n">0<span>stirrups</span></div>
+  <div class="rows">
+   <div>Cutting length<b id="cl">0 mm</b><span id="clf"></span></div>
+   <div>Total steel<b id="kg">0 kg</b><span id="tot"></span></div>
+   <div>Per beam<b id="zones"></b><span>end + middle + end</span></div>
+  </div>
+  <div class="why" id="why"></div>
+ </div>
+ <div class="pic"><svg id="pic" viewBox="0 0 600 170" role="img" aria-label="Beam elevation with stirrup positions"></svg>
+ <div class="leg"><span><i style="background:var(--z1)"></i>Support zone (close spacing)</span><span><i style="background:var(--z2)"></i>Middle zone</span></div></div>
+</div>
+<div class="ctl">
+ <div>
+  <label for="L">Clear span between supports (m)</label><input id="L" type="number" step="0.05" value="4.5" inputmode="decimal">
+  <label for="f" class="f">First stirrup from support face (mm)</label><input id="f" type="number" step="5" value="50">
+  <label for="mode" class="f">Spacing</label>
+  <select id="mode"><option value="zone" selected>Closer at supports (2 zones)</option><option value="one">Same spacing all along</option></select>
+ </div>
+ <div>
+  <div class="two"><div><label for="s1">End spacing (mm)</label><input id="s1" type="number" step="5" value="100"></div><div id="s2box"><label for="s2">Middle spacing (mm)</label><input id="s2" type="number" step="5" value="150"></div></div>
+  <div id="zbox"><label for="z" class="f">End zone length each side (mm)</label><input id="z" type="number" step="50" value="900"><div class="hint">Often 2 × beam depth. Take it from the drawing.</div></div>
+ </div>
+ <div>
+  <div class="two"><div><label for="B">Beam width (mm)</label><input id="B" type="number" step="5" value="230"></div><div><label for="D">Beam depth (mm)</label><input id="D" type="number" step="5" value="450"></div></div>
+  <div class="two f"><div><label for="c">Clear cover (mm)</label><input id="c" type="number" step="5" value="25"></div><div><label for="d">Stirrup bar (mm)</label><select id="d"><option>6</option><option selected>8</option><option>10</option><option>12</option></select></div></div>
+  <label for="nb" class="f">Number of identical beams</label><input id="nb" type="number" min="1" step="1" value="1">
+ </div>
+</div>
+</div>
+<div class="band">
+<h2>How it is worked out</h2>
+<div class="scroll"><table id="tab"><tbody></tbody></table></div>
+<ul class="notes">
+ <li>Count: stirrups are placed from the first one at the support face, at end spacing through each end zone and middle spacing between, with no gap bigger than the spacing.</li>
+ <li>Cutting length = 2 × (a + b) + 2 hooks of 10d − bend deductions (3 bends of 90° at 2d, 2 hooks of 135° at 3d), where a = B − 2 × cover − d and b = D − 2 × cover − d. Hook rules vary by code and drawing: follow your drawing.</li>
+ <li>Weight = d² ÷ 162 kg per metre. Check spacing and zones against the structural drawing.</li>
+</ul>
+</div>
+<div class="foot"><div class="band"><div><b>Free tool by Arbab Ali Thebo</b><br>Senior Surveyor &amp; Quantity Surveyor · BBS, BOQ, takeoffs · WhatsApp +92 344 5612046</div><button class="copy" id="cp">Copy result</button></div></div>
+<script>
+{
+const $=id=>document.getElementById(id);const v=id=>+$(id).value||0;
+const f0=(n,d=0)=>n.toLocaleString('en-GB',{maximumFractionDigits:d,minimumFractionDigits:d});
+function positions(L,f,s1,s2,z,mode){
+ const a=f,b=L-f;if(b<=a)return{p:[a],kind:[1]};
+ if(mode==='one'){const n=Math.ceil((b-a)/s1-1e-9)+1,st=(b-a)/(n-1||1);return{p:[...Array(n)].map((_,i)=>a+i*st),kind:Array(n).fill(2)}}
+ const zEnd=Math.min(z,L/2);let left=[];for(let x=a;x<=zEnd+1e-6;x+=s1)left.push(x);
+ if(!left.length)left=[a];const right=left.map(x=>L-x).reverse();
+ let lmax=left[left.length-1],rmin=right[0];
+ if(rmin<=lmax+s1*0.5){const n=Math.ceil((b-a)/s1-1e-9)+1,st=(b-a)/(n-1||1);return{p:[...Array(n)].map((_,i)=>a+i*st),kind:Array(n).fill(1)}}
+ const gap=rmin-lmax,m=Math.max(0,Math.ceil(gap/s2-1e-9)-1),st=gap/(m+1);const mid=[...Array(m)].map((_,i)=>lmax+(i+1)*st);
+ return{p:[...left,...mid,...right],kind:[...left.map(()=>1),...mid.map(()=>2),...right.map(()=>1)],nl:left.length,nm:m};
+}
+function update(){
+ const L=v('L')*1000,f=v('f'),s1=Math.max(25,v('s1')),s2=Math.max(25,v('s2')),z=v('z'),mode=$('mode').value,B=v('B'),D=v('D'),c=v('c'),d=+$('d').value,nb=Math.max(1,Math.round(v('nb')));
+ $('s2box').hidden=$('zbox').hidden=mode==='one';
+ const r=positions(L,f,s1,s2,z,mode),n=r.p.length;
+ const a=B-2*c-d,b=D-2*c-d,cl=2*(a+b)+20*d-3*2*d-2*3*d,kgm=d*d/162,kg=n*nb*cl/1000*kgm;
+ $('n').innerHTML=`${n*nb}<span>stirrups${nb>1?` (${n} per beam)`:''}</span>`;
+ $('cl').textContent=f0(cl)+' mm';$('clf').textContent=`${f0(a)} × ${f0(b)} mm, ${d} mm bar`;
+ $('kg').textContent=f0(kg,1)+' kg';$('tot').textContent=f0(n*nb*cl/1000,1)+' m of '+d+' mm';
+ $('zones').textContent=mode==='one'?n+' at '+s1:`${r.nl} + ${r.nm} + ${r.nl}`;
+ const simple=Math.round(L/s2)+1;
+ $('why').textContent=mode==='one'?`One spacing of ${s1} mm over the whole ${f0(L)} mm span.`:(n!==simple?`The simple formula (${f0(L)} ÷ ${s2}) + 1 gives ${simple}. With ${s1} mm at the ends you need ${n}, ${n-simple>0?n-simple+' more':simple-n+' fewer'} per beam.`:`Here the simple formula gives the same count, ${n}.`);
+ const W=600,x0=30,x1=570,sc=(x1-x0)/L;let s=`<rect x="${x0}" y="40" width="${x1-x0}" height="70" fill="var(--conc)"/><rect x="0" y="40" width="${x0}" height="110" fill="currentColor" opacity=".25"/><rect x="${x1}" y="40" width="${W-x1}" height="110" fill="currentColor" opacity=".25"/>`;
+ r.p.forEach((p,i)=>{const x=x0+p*sc;s+=`<line x1="${x}" y1="44" x2="${x}" y2="106" stroke="${r.kind[i]===1?'var(--z1)':'var(--z2)'}" stroke-width="${n>80?1:2}"/>`});
+ s+=`<line x1="${x0}" y1="128" x2="${x1}" y2="128" stroke="currentColor"/><text x="${W/2}" y="146" font-size="13" text-anchor="middle" fill="currentColor">Clear span ${f0(L)} mm · ${n} stirrups</text>`;
+ if(mode!=='one'){const zx=Math.min(z,L/2)*sc;s+=`<text x="${x0+zx/2}" y="30" font-size="12" text-anchor="middle" fill="var(--z1)">${s1} c/c</text><text x="${W/2}" y="30" font-size="12" text-anchor="middle" fill="var(--z2)">${s2} c/c</text><text x="${x1-zx/2}" y="30" font-size="12" text-anchor="middle" fill="var(--z1)">${s1} c/c</text>`}
+ $('pic').innerHTML=s;
+ $('tab').tBodies[0].innerHTML=[['a = B − 2c − d',f0(a)+' mm'],['b = D − 2c − d',f0(b)+' mm'],['2 × (a + b)',f0(2*(a+b))+' mm'],['+ 2 hooks × 10d','+'+f0(20*d)+' mm'],['− 3 bends 90° × 2d','−'+f0(6*d)+' mm'],['− 2 bends 135° × 3d','−'+f0(6*d)+' mm'],['Cutting length',f0(cl)+' mm'],['Weight per metre ('+d+' mm)',f0(kgm,3)+' kg/m'],['Total',f0(n*nb)+' nos · '+f0(kg,1)+' kg']].map(([k,x])=>`<tr><td>${k}</td><td>${x}</td></tr>`).join('');
+}
+['L','f','s1','s2','z','B','D','c','nb'].forEach(id=>$(id).addEventListener('input',update));['mode','d'].forEach(id=>$(id).addEventListener('change',update));
+$('cp').addEventListener('click',async()=>{const t=`Stirrups: ${$('n').innerText.replace(/\n/g,' ')}, cutting length ${$('cl').textContent}, ${$('kg').textContent} (arbabalithebo92-web.github.io/stirrups.html)`;try{await navigator.clipboard.writeText(t);$('cp').textContent='Copied'}catch(e){$('cp').textContent='Copy blocked'}setTimeout(()=>$('cp').textContent='Copy result',1500)});
+update();
+}
+</script></body></html>
