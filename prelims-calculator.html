@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preliminaries Calculator: Fixed + Time-Related | Arbab Ali Thebo</title>
+<meta name="description" content="Free preliminaries calculator for contractors and QS: split prelims into fixed and time-related costs, see the weekly cost of delay and compare with a flat percentage.">
+<style>
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0f1b2d;color:#1d2433}
+header{color:#fff;padding:26px 16px 14px;text-align:center}
+header h1{margin:0 0 6px;font-size:25px;line-height:1.2}
+header h1 span{color:#ff8a1f}
+header p{margin:0;color:#c9d3e3;font-size:15px}
+main{max-width:820px;margin:0 auto;padding:0 12px 40px}
+.card{background:#fff;border-radius:14px;padding:18px;margin-top:14px;box-shadow:0 4px 18px rgba(0,0,0,.25)}
+h2{font-size:17px;margin:0 0 10px;color:#0f1b2d}
+.row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:640px){.row{grid-template-columns:1fr 1fr}}
+label{display:block;font-weight:600;font-size:13px;margin-bottom:4px}
+input,select{width:100%;padding:9px;border:1px solid #c7cfdb;border-radius:8px;font-size:15px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{padding:6px 4px;border-bottom:1px solid #eef1f6;text-align:left}
+th{color:#5b6576;font-size:12px;font-weight:600}
+td input{padding:6px}
+td.n{width:120px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:640px){.tiles{grid-template-columns:1fr 1fr}}
+.tile{background:#f3f6fb;border-radius:10px;padding:11px}
+.tile b{display:block;font-size:20px;color:#0f1b2d}
+.tile span{font-size:12px;color:#5b6576}
+.hot{background:#0f1b2d}.hot b{color:#ff8a1f}.hot span{color:#c9d3e3}
+.msg{margin-top:12px;padding:12px;border-left:4px solid #ff8a1f;background:#fff7ef;font-size:14px;line-height:1.5}
+.add{margin-top:8px;background:none;border:1px dashed #9aa6b8;border-radius:8px;padding:7px 10px;cursor:pointer;color:#0f1b2d}
+.cta{background:#ff8a1f;color:#fff;text-align:center}
+.cta h2{color:#fff}
+.cta a{display:inline-block;margin:5px;padding:10px 15px;background:#0f1b2d;color:#fff;border-radius:8px;text-decoration:none;font-weight:600}
+footer{color:#8796ad;text-align:center;font-size:12px;padding:10px}
+footer a{color:#c9d3e3}
+.x{background:none;border:none;color:#b00020;cursor:pointer;font-size:16px}
+</style>
+</head>
+<body>
+<header>
+<h1>Preliminaries: <span>% or real cost?</span></h1>
+<p>Split prelims into fixed and time-related costs, and see what each week of delay really costs.</p>
+</header>
+<main>
+<div class="card">
+<h2>Project</h2>
+<div class="row">
+<div><label>Currency</label><select id="cur"><option value="£">£ GBP</option><option value="Rs ">Rs PKR</option><option value="AED ">AED</option><option value="$">$ USD</option></select></div>
+<div><label>Contract value</label><input id="cv" type="number" value="1200000"></div>
+<div><label>Programme (weeks)</label><input id="wk" type="number" value="26"></div>
+<div><label>Possible delay (weeks)</label><input id="dl" type="number" value="8"></div>
+</div>
+<div class="row" style="margin-top:10px">
+<div><label>Insurances (% of contract)</label><input id="ins" type="number" step="0.05" value="0.3"></div>
+<div><label>Compare with flat %</label><input id="flat" type="number" step="0.5" value="7"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>Fixed items <small style="font-weight:400;color:#5b6576">(happen once)</small></h2>
+<table id="fx"><tr><th>Item</th><th class="n">Cost</th><th></th></tr></table>
+<button class="add" onclick="addRow('fx','New fixed item',0)">+ add fixed item</button>
+</div>
+
+<div class="card">
+<h2>Time-related items <small style="font-weight:400;color:#5b6576">(cost per week)</small></h2>
+<table id="tr"><tr><th>Item</th><th class="n">Per week</th><th></th></tr></table>
+<button class="add" onclick="addRow('tr','New weekly item',0)">+ add weekly item</button>
+</div>
+
+<div class="card">
+<h2>Result</h2>
+<div class="tiles">
+<div class="tile"><b id="rFix">0</b><span>fixed + insurances</span></div>
+<div class="tile"><b id="rWeek">0</b><span>time-related per week</span></div>
+<div class="tile"><b id="rTime">0</b><span>time-related over programme</span></div>
+<div class="tile hot"><b id="rTot">0</b><span>total preliminaries</span></div>
+<div class="tile"><b id="rPct">0%</b><span>of contract value</span></div>
+<div class="tile"><b id="rFlat">0</b><span>flat % would give</span></div>
+<div class="tile hot"><b id="rDelay">0</b><span>extra prelims if delayed</span></div>
+<div class="tile"><b id="rDTot">0</b><span>total prelims with delay</span></div>
+<div class="tile"><b id="rDPct">0%</b><span>of contract with delay</span></div>
+</div>
+<div class="msg" id="msg"></div>
+</div>
+
+<div class="card">
+<h2>Why split them?</h2>
+<p style="font-size:14px;line-height:1.55;margin:0">A flat percentage hides the one thing that drives most preliminaries: <b>time</b>. Site staff, welfare, security, plant and temporary services cost the same every week, whatever the contract value. Pricing them weekly gives you a clear <b>cost per week of delay</b>, which is exactly what you need to support an extension-of-time or loss-and-expense claim. Figures shown are a fictional example; replace them with your own.</p>
+</div>
+
+<div class="card cta">
+<h2>Need prelims priced or a delay claim backed up?</h2>
+<p>I build priced preliminaries, programme-linked cost sheets and delay cost records for contractors and subcontractors, remotely.</p>
+<a href="mailto:arbabalithebo92@gmail.com?subject=Preliminaries%20pricing">Email me</a>
+<a href="https://www.linkedin.com/in/arbabalithebo/" target="_blank" rel="noopener">LinkedIn</a>
+<a href="https://wa.me/923445612046" target="_blank" rel="noopener">WhatsApp</a>
+</div>
+<footer>Arbab Ali Thebo, Remote QS · <a href="index.html">More free site tools</a></footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const sum=t=>[...$(t).querySelectorAll('tr')].slice(1).reduce((a,r)=>a+(+r.querySelectorAll('input')[1].value||0),0);
+const FIX=[['Mobilisation & site set-up',3500],['Setting out',1500],['Signage, hoarding & H&S set-up',1000],['As-built drawings & O&M',1200],['Demobilisation & final clean',2500]];
+const TR=[['Site manager',1400],['QS / engineer (part-time)',350],['Welfare & site cabins',250],['Security & fencing hire',180],['Temporary water & power',120],['Small plant & tools',300],['Skips & cleaning',200]];
+function addRow(t,name,val){const tr=document.createElement('tr');tr.innerHTML='<td><input value="'+name.replace(/"/g,'&quot;')+'"></td><td class="n"><input type="number" value="'+val+'"></td><td><button class="x" title="remove">×</button></td>';
+tr.querySelector('.x').onclick=()=>{tr.remove();calc()};tr.querySelectorAll('input').forEach(i=>i.oninput=calc);$(t).appendChild(tr);calc()}
+function calc(){
+ const c=$('cur').value,f=v=>c+Math.round(v).toLocaleString('en-GB');
+ const cv=+$('cv').value||0,wk=+$('wk').value||0,dl=+$('dl').value||0;
+ const fix=sum('fx')+cv*(+$('ins').value||0)/100,week=sum('tr'),time=week*wk,tot=fix+time,flat=cv*(+$('flat').value||0)/100;
+ const extra=week*dl,dtot=tot+extra;
+ $('rFix').textContent=f(fix);$('rWeek').textContent=f(week);$('rTime').textContent=f(time);$('rTot').textContent=f(tot);
+ $('rPct').textContent=cv?(tot/cv*100).toFixed(1)+'%':'-';$('rFlat').textContent=f(flat);$('rDelay').textContent=f(extra);
+ $('rDTot').textContent=f(dtot);$('rDPct').textContent=cv?(dtot/cv*100).toFixed(1)+'%':'-';
+ const share=tot?Math.round(time/tot*100):0;
+ $('msg').innerHTML='<b>'+share+'%</b> of your prelims are time-related. Every week of delay costs about <b>'+f(week)+'</b>. '+
+ (dl?'A delay of '+dl+' weeks adds <b>'+f(extra)+'</b>, but a flat '+$('flat').value+'% stays at '+f(flat)+(dtot>flat?', leaving <b>'+f(dtot-flat)+'</b> uncovered.':'.'):'');
+}
+['cur','cv','wk','dl','ins','flat'].forEach(i=>$(i).oninput=calc);
+FIX.forEach(r=>addRow('fx',...r));TR.forEach(r=>addRow('tr',...r));calc();
+</script>
+</body>
+</html>
