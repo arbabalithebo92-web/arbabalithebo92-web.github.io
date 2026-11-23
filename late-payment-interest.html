@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UK Late Payment Interest Calculator for Subcontractors | Arbab Ali Thebo</title>
+<meta name="description" content="Free calculator: statutory interest (8% over base rate) and fixed compensation you can claim on late-paid invoices under the UK Late Payment of Commercial Debts (Interest) Act 1998.">
+<style>
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0f1b2d;color:#1d2433}
+header{background:#0f1b2d;color:#fff;padding:28px 18px 18px;text-align:center}
+header h1{margin:0 0 6px;font-size:26px;line-height:1.2}
+header h1 span{color:#ff8a1f}
+header p{margin:0;color:#c9d3e3;font-size:15px}
+main{max-width:760px;margin:0 auto;padding:0 14px 40px}
+.card{background:#fff;border-radius:14px;padding:20px;margin-top:16px;box-shadow:0 4px 18px rgba(0,0,0,.25)}
+label{display:block;font-weight:600;font-size:14px;margin:12px 0 4px}
+small{color:#5b6576;font-weight:400}
+input{width:100%;padding:11px;border:1px solid #c7cfdb;border-radius:8px;font-size:16px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.row{grid-template-columns:1fr}}
+.res{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:6px}
+.tile{background:#f3f6fb;border-radius:10px;padding:12px}
+.tile b{display:block;font-size:22px;color:#0f1b2d}
+.tile span{font-size:13px;color:#5b6576}
+.total{grid-column:1/-1;background:#0f1b2d;color:#fff}
+.total b{color:#ff8a1f;font-size:28px}
+.total span{color:#c9d3e3}
+.msg{margin-top:12px;padding:12px;border-left:4px solid #ff8a1f;background:#fff7ef;font-size:14px;line-height:1.5}
+h2{font-size:18px;margin:0 0 8px;color:#0f1b2d}
+ul{padding-left:18px;line-height:1.6;font-size:14px;margin:6px 0}
+.cta{background:#ff8a1f;color:#fff;text-align:center}
+.cta h2{color:#fff}
+.cta a{display:inline-block;margin:6px;padding:11px 16px;background:#0f1b2d;color:#fff;border-radius:8px;text-decoration:none;font-weight:600}
+.note{font-size:12px;color:#5b6576;margin-top:10px}
+footer{color:#8796ad;text-align:center;font-size:12px;padding:10px}
+footer a{color:#c9d3e3}
+</style>
+</head>
+<body>
+<header>
+<h1>Paid late? <span>Work out what you can claim.</span></h1>
+<p>UK Late Payment Act calculator for subcontractors and suppliers</p>
+</header>
+<main>
+<div class="card">
+<label>Invoice / application amount (£) <small>gross, incl. VAT</small></label>
+<input id="amt" type="number" min="0" step="0.01" value="18500">
+<div class="row">
+<div><label>Final date for payment</label><input id="due" type="date"></div>
+<div><label>Date actually paid <small>(blank = today)</small></label><input id="paid" type="date"></div>
+</div>
+<label>Reference rate (%) <small>BoE base rate on 30 Jun or 31 Dec before the payment was due</small></label>
+<input id="base" type="number" step="0.01" value="3.75">
+<label>Amount already paid on time (£) <small>optional, if part-paid</small></label>
+<input id="part" type="number" min="0" step="0.01" value="0">
+</div>
+
+<div class="card">
+<h2>What you can claim</h2>
+<div class="res">
+<div class="tile"><b id="days">0</b><span>days late</span></div>
+<div class="tile"><b id="rate">0%</b><span>statutory interest rate (8% + reference)</span></div>
+<div class="tile"><b id="daily">£0</b><span>interest per day</span></div>
+<div class="tile"><b id="int">£0</b><span>interest to date</span></div>
+<div class="tile"><b id="comp">£0</b><span>fixed compensation</span></div>
+<div class="tile total"><b id="tot">£0</b><span>total you can add to the debt (interest + compensation)</span></div>
+</div>
+<div class="msg" id="msg"></div>
+</div>
+
+<div class="card">
+<h2>How it works</h2>
+<ul>
+<li>Interest = late amount × (8% + reference rate) ÷ 365 × days late. Simple interest, not compounded.</li>
+<li>Fixed compensation per invoice: £40 under £1,000, £70 from £1,000 to £9,999.99, £100 from £10,000.</li>
+<li>Reference rate is fixed for each half-year: the base rate on 31 Dec (debts due Jan–Jun) or 30 Jun (debts due Jul–Dec).</li>
+<li>Applies business-to-business, unless your contract gives its own "substantial remedy" for late payment.</li>
+<li>In construction, the "final date for payment" comes from your contract or the Scheme. Miss a Pay Less Notice and the notified sum is due in full.</li>
+</ul>
+<p class="note">Guide only, not legal advice. Check your contract terms and get advice before issuing a claim.</p>
+</div>
+
+<div class="card cta">
+<h2>Not sure what's actually due?</h2>
+<p>I check payment applications, notices and variations for UK subcontractors, remotely. Send me the application and I'll tell you what you're owed and by when.</p>
+<a href="mailto:arbabalithebo92@gmail.com?subject=Late%20payment%20check">Email me</a>
+<a href="https://www.linkedin.com/in/arbabalithebo/" target="_blank" rel="noopener">LinkedIn</a>
+<a href="https://wa.me/923445612046" target="_blank" rel="noopener">WhatsApp</a>
+</div>
+<footer>Arbab Ali Thebo, Remote QS · <a href="index.html">More free site tools</a></footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const gbp=v=>'£'+v.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+function iso(d){return d.toISOString().slice(0,10)}
+(function init(){const t=new Date();const d=new Date(t);d.setDate(t.getDate()-45);$('due').value=iso(d);})();
+function calc(){
+ const amt=Math.max(0,(+$('amt').value||0)-(+$('part').value||0));
+ const base=+$('base').value||0;
+ const due=$('due').value?new Date($('due').value+'T00:00:00'):null;
+ const paid=$('paid').value?new Date($('paid').value+'T00:00:00'):new Date(new Date().toISOString().slice(0,10)+'T00:00:00');
+ let days=0;if(due){days=Math.max(0,Math.round((paid-due)/86400000));}
+ const rate=8+base;const daily=amt*rate/100/365;const intr=daily*days;
+ const gross=+$('amt').value||0;
+ let comp=0;if(days>0&&amt>0){comp=gross<1000?40:gross<10000?70:100;}
+ $('days').textContent=days;$('rate').textContent=rate.toFixed(2)+'%';
+ $('daily').textContent=gbp(daily);$('int').textContent=gbp(intr);$('comp').textContent=gbp(comp);$('tot').textContent=gbp(intr+comp);
+ $('msg').textContent=days===0?'Not late yet. Interest starts the day after the final date for payment.':
+ `${days} days late on ${gbp(amt)}. That's ${gbp(intr)} interest plus ${gbp(comp)} compensation. Every further day adds ${gbp(daily)}. Most subcontractors never claim this.`;
+}
+document.querySelectorAll('input').forEach(i=>i.addEventListener('input',calc));calc();
+</script>
+</body>
+</html>
