@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>US ↔ UK Takeoff Unit Converter | SF, LF, CY, SQ to m², m, m³ | Free QS Tool</title>
+<meta name="description" content="Free takeoff unit converter for estimators and QSs: SF to m², LF to m, CY to m³, roofing squares, roof pitch factor and plasterboard count with waste. US and UK (NRM2) units.">
+<style>
+:root{--navy:#0f2a4a;--orange:#f28c28;--bg:#f4f6f9;--line:#d5dbe3;--ink:#1a2433}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--navy);color:#fff;padding:22px 18px;border-bottom:5px solid var(--orange)}
+header h1{margin:0;font-size:24px}header p{margin:6px 0 0;color:#cfd8e3;font-size:14px}
+main{max-width:860px;margin:0 auto;padding:16px}
+.card{background:#fff;border:1px solid var(--line);border-top:4px solid var(--orange);border-radius:6px;padding:16px;margin-bottom:16px}
+.card h2{margin:0 0 4px;font-size:18px;color:var(--navy)}.card .sub{margin:0 0 12px;font-size:13px;color:#5b6675}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+label{font-size:12px;font-weight:bold;color:#3a4656;display:block;margin-bottom:4px}
+input,select{font-size:16px;padding:9px;border:1px solid var(--line);border-radius:4px;width:100%}
+.f{flex:1;min-width:130px}
+.out{margin-top:12px;background:#fdf1e4;border-left:4px solid var(--orange);padding:10px 12px;font-size:15px;line-height:1.6}
+.out b{color:var(--navy);font-size:18px}
+table{width:100%;border-collapse:collapse;font-size:14px}th{background:var(--navy);color:#fff;text-align:left;padding:7px}td{border:1px solid var(--line);padding:7px}
+.tip{font-size:13px;color:#5b6675;margin-top:8px}
+footer{background:var(--navy);color:#cfd8e3;text-align:center;padding:18px;font-size:14px}
+footer a{color:var(--orange);font-weight:bold;text-decoration:none}
+.cta{display:inline-block;background:var(--orange);color:#fff!important;padding:10px 16px;border-radius:4px;margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+<h1>US ↔ UK Takeoff Unit Converter</h1>
+<p>Match the unit to how the item is priced. SF, LF, CY and SQ to m², m and m³, plus roof pitch and board counts.</p>
+</header>
+<main>
+
+<section class="card">
+<h2>1. Quick unit converter</h2>
+<p class="sub">Type a quantity and pick the unit. Converts both ways.</p>
+<div class="row">
+<div class="f"><label for="qv">Quantity</label><input id="qv" type="number" value="1000" step="any"></div>
+<div class="f"><label for="qu">Unit</label>
+<select id="qu">
+<option value="sf">SF (square feet)</option><option value="m2">m² (square metres)</option>
+<option value="lf">LF (linear feet)</option><option value="m">m (metres)</option>
+<option value="cy">CY (cubic yards)</option><option value="m3">m³ (cubic metres)</option>
+<option value="cf">CF (cubic feet)</option>
+<option value="sq">SQ (roofing square = 100 SF)</option>
+</select></div>
+</div>
+<div class="out" id="qout"></div>
+</section>
+
+<section class="card">
+<h2>2. Roof: plan area → slope area → squares</h2>
+<p class="sub">Roofs are measured on plan but priced on the slope. Plan area alone under-orders.</p>
+<div class="row">
+<div class="f"><label for="ra">Plan area</label><input id="ra" type="number" value="1500" step="any"></div>
+<div class="f"><label for="ru">Unit</label><select id="ru"><option value="sf">SF</option><option value="m2">m²</option></select></div>
+<div class="f"><label for="rp">Pitch</label>
+<select id="rp">
+<option value="deg">Enter degrees →</option>
+<option value="3">3/12</option><option value="4">4/12</option><option value="5">5/12</option><option value="6" selected>6/12</option>
+<option value="7">7/12</option><option value="8">8/12</option><option value="9">9/12</option><option value="10">10/12</option><option value="12">12/12</option>
+</select></div>
+<div class="f"><label for="rd">Degrees (if chosen)</label><input id="rd" type="number" value="30" step="any"></div>
+<div class="f"><label for="rw">Waste %</label><input id="rw" type="number" value="10" step="any"></div>
+</div>
+<div class="out" id="rout"></div>
+</section>
+
+<section class="card">
+<h2>3. Drywall / plasterboard: area → boards</h2>
+<p class="sub">Measured by area, bought by the board. Board size and waste change the count.</p>
+<div class="row">
+<div class="f"><label for="da">Wall/ceiling area (one face)</label><input id="da" type="number" value="500" step="any"></div>
+<div class="f"><label for="du">Unit</label><select id="du"><option value="m2">m²</option><option value="sf">SF</option></select></div>
+<div class="f"><label for="db">Board size</label>
+<select id="db">
+<option value="2.88">1200 × 2400 mm (2.88 m²)</option><option value="2.16">900 × 2400 mm (2.16 m²)</option>
+<option value="2.9729">4 × 8 ft (32 SF)</option><option value="4.4594">4 × 12 ft (48 SF)</option>
+</select></div>
+<div class="f"><label for="dl">Layers</label><input id="dl" type="number" value="1" step="1" min="1"></div>
+<div class="f"><label for="dw">Waste %</label><input id="dw" type="number" value="10" step="any"></div>
+</div>
+<div class="out" id="dout"></div>
+</section>
+
+<section class="card">
+<h2>4. Which unit is each item measured in?</h2>
+<table>
+<tr><th>Item</th><th>US</th><th>UK (NRM2)</th></tr>
+<tr><td>Drywall, flooring, cladding, insulation</td><td>SF</td><td>m²</td></tr>
+<tr><td>Skirting, trims, edge metal, gutters</td><td>LF</td><td>m</td></tr>
+<tr><td>Concrete, excavation, backfill</td><td>CY</td><td>m³</td></tr>
+<tr><td>Doors, windows, fixtures, drains</td><td>EA</td><td>nr</td></tr>
+<tr><td>Roof coverings</td><td>SQ (100 SF)</td><td>m² (on slope)</td></tr>
+<tr><td>One-off items, kitchens, allowances</td><td>LS</td><td>item</td></tr>
+</table>
+<p class="tip">Rule of thumb: if the subbie prices per board, per bag or per square, convert your takeoff to that unit before you price it.</p>
+</section>
+
+</main>
+<footer>
+Free tool by <b>Arbab Ali Thebo</b>, Senior QS, remote takeoffs, priced BOQs and payment applications for UK contractors.<br>
+<a class="cta" href="https://www.linkedin.com/in/arbabalithebo/" target="_blank" rel="noopener">Connect on LinkedIn</a>
+&nbsp; <a class="cta" href="index.html">More free QS tools</a>
+</footer>
+<script>
+const $=id=>document.getElementById(id);
+const f=(n,d=2)=>isFinite(n)?n.toLocaleString('en-GB',{maximumFractionDigits:d,minimumFractionDigits:0}):'-';
+const SF=0.09290304,FT=0.3048,CY=0.764554858,CF=0.0283168466;
+function q(){
+ const v=parseFloat($('qv').value)||0,u=$('qu').value;let t='';
+ if(u==='sf')t=`<b>${f(v*SF)} m²</b> &nbsp;·&nbsp; ${f(v/100)} SQ`;
+ if(u==='m2')t=`<b>${f(v/SF)} SF</b> &nbsp;·&nbsp; ${f(v/SF/100)} SQ`;
+ if(u==='lf')t=`<b>${f(v*FT)} m</b>`;
+ if(u==='m')t=`<b>${f(v/FT)} LF</b>`;
+ if(u==='cy')t=`<b>${f(v*CY)} m³</b> &nbsp;·&nbsp; ${f(v*27)} CF`;
+ if(u==='m3')t=`<b>${f(v/CY)} CY</b> &nbsp;·&nbsp; ${f(v/CF)} CF`;
+ if(u==='cf')t=`<b>${f(v*CF)} m³</b> &nbsp;·&nbsp; ${f(v/27)} CY`;
+ if(u==='sq')t=`<b>${f(v*100)} SF</b> &nbsp;·&nbsp; ${f(v*100*SF)} m²`;
+ $('qout').innerHTML=t;
+}
+function r(){
+ let a=parseFloat($('ra').value)||0;const unit=$('ru').value;const sf=unit==='sf'?a:a/SF;
+ const p=$('rp').value;let deg,label;
+ if(p==='deg'){deg=parseFloat($('rd').value)||0;label=f(deg,1)+'°';}
+ else{deg=Math.atan(parseFloat(p)/12)*180/Math.PI;label=p+'/12 ('+f(deg,1)+'°)';}
+ const k=1/Math.cos(deg*Math.PI/180),w=1+(parseFloat($('rw').value)||0)/100;
+ const slope=sf*k,order=slope*w;
+ $('rout').innerHTML=`Pitch ${label} → factor <b>${f(k,3)}</b><br>Slope area: <b>${f(slope,0)} SF</b> (${f(slope*SF,1)} m²) = ${f(slope/100,2)} SQ<br>Order with waste: <b>${f(order/100,2)} SQ</b> (${f(order*SF,1)} m²)<br><span class="tip">Plan area alone would have under-ordered by ${f((k-1)*100,1)}%.</span>`;
+}
+function d(){
+ let a=parseFloat($('da').value)||0;const m2=$('du').value==='m2'?a:a*SF;
+ const b=parseFloat($('db').value),l=Math.max(1,parseInt($('dl').value)||1),w=1+(parseFloat($('dw').value)||0)/100;
+ const net=m2*l/b,boards=Math.ceil(net*w);
+ $('dout').innerHTML=`Net boards: ${f(net,1)} &nbsp;·&nbsp; With waste: <b>${boards} boards</b><br><span class="tip">${f(m2,1)} m² (${f(m2/SF,0)} SF) × ${l} layer(s). Both faces of a partition? Double the area.</span>`;
+}
+['qv','qu'].forEach(i=>$(i).addEventListener('input',q));
+['ra','ru','rp','rd','rw'].forEach(i=>$(i).addEventListener('input',r));
+['da','du','db','dl','dw'].forEach(i=>$(i).addEventListener('input',d));
+q();r();d();
+</script>
+</body>
+</html>
