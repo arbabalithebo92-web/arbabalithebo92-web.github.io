@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MEP Progress &amp; Valuation Tracker – Free Weighted Progress Calculator (UK)</title>
+<meta name="description" content="Free tool for UK MEP subcontractors: turn first fix, second fix and final fix percentages into value-weighted progress and a payment application figure, with retention. By Arbab Ali Thebo, Senior QS.">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Arial,sans-serif;background:#f4f6fa;color:#1d2433}
+header{background:#0f1f3a;color:#fff;padding:22px 5%}header h1{margin:0;font-size:clamp(22px,4vw,32px)}header h1 b{color:#ff7a1a}header p{margin:8px 0 0;opacity:.85;max-width:820px}
+main{padding:20px 5%;max-width:1200px;margin:auto}.card{background:#fff;border:1px solid #e3e7ef;border-radius:10px;padding:18px;margin-bottom:18px}
+h2{font-size:19px;margin:0 0 12px}h2 span{color:#ff7a1a}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+label{font-size:12px;color:#556;display:block;margin-bottom:3px}
+input{width:100%;padding:8px;border:1px solid #cfd6e3;border-radius:6px;font:inherit;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:6px 5px;border-bottom:1px solid #eef1f6;text-align:left;vertical-align:middle}
+th{background:#f4f6fa;font-size:12px;white-space:nowrap}td.n{text-align:right;white-space:nowrap}
+td input{min-width:70px}td input.nm{min-width:170px}
+button{background:#ff7a1a;color:#fff;border:0;padding:9px 14px;border-radius:6px;font-weight:700;cursor:pointer;font-size:14px}
+button.sec{background:#0f1f3a}button.x{background:#e9edf4;color:#b42318;padding:6px 10px}
+.fa{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:12px}
+.box{background:#0f1f3a;color:#fff;border-radius:8px;padding:12px}.box small{opacity:.75;display:block}.box b{font-size:22px;color:#ff7a1a}
+.warn{background:#fff5f5;border-left:4px solid #b42318;padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
+.ok{background:#f0faf3;border-left:4px solid #1e7d32;padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
+.bar{height:8px;background:#e9edf4;border-radius:4px;overflow:hidden;min-width:60px}.bar i{display:block;height:100%;background:#ff7a1a}
+.note{font-size:12px;color:#667;line-height:1.5}
+.cta{background:#0f1f3a;color:#fff;border-radius:10px;padding:20px}.cta h2{color:#fff}
+.cta a{display:inline-block;margin:6px 8px 0 0;padding:10px 14px;border-radius:6px;background:#ff7a1a;color:#fff;text-decoration:none;font-weight:700}.cta a.s{background:#fff;color:#0f1f3a}
+footer{text-align:center;padding:18px;font-size:12px;color:#778}footer a{color:#0f5bd8}
+@media print{.cta,button,footer a{display:none}body{background:#fff}}
+</style></head><body>
+<header><h1>MEP Progress &amp; <b>Valuation</b> Tracker</h1>
+<p>Most MEP progress sheets average the percentages. A plant room at 70% and a floor of conduits at 70% aren't worth the same. Put in each package's value and its first fix, second fix and final fix progress, and get the weighted progress and the figure for your next payment application.</p></header>
+<main>
+<div class="card"><h2>1. Stage <span>weightings</span> &amp; terms</h2>
+<div class="grid">
+<div><label>First fix (% of value)</label><input id="w1" type="number" value="40"></div>
+<div><label>Second fix (% of value)</label><input id="w2" type="number" value="40"></div>
+<div><label>Final fix / T&amp;C (% of value)</label><input id="w3" type="number" value="20"></div>
+<div><label>Retention (%)</label><input id="ret" type="number" value="5" step="0.5"></div>
+<div><label>Previously certified (£, gross)</label><input id="prev" type="number" value="0" step="100"></div>
+</div>
+<p class="note" id="wnote"></p></div>
+
+<div class="card" style="overflow-x:auto"><h2>2. Packages / <span>areas</span></h2>
+<table><thead><tr><th>Package or area</th><th>Value (£)</th><th>1st fix %</th><th>2nd fix %</th><th>Final %</th><th>Progress</th><th class="n">Earned (£)</th><th></th></tr></thead><tbody id="tb"></tbody></table>
+<div style="margin-top:10px"><button onclick="addRow()">+ Add row</button> <button class="sec" onclick="sample()">Load sample</button> <button class="sec" onclick="clearAll()">Clear</button></div>
+<p class="note">Sample figures are fictional. Your entries stay in your own browser.</p></div>
+
+<div class="card"><h2>3. <span>Result</span></h2>
+<div class="fa">
+<div class="box"><small>Weighted progress (by value)</small><b id="wp">–</b></div>
+<div class="box"><small>Simple average (what most sheets show)</small><b id="sa">–</b></div>
+<div class="box"><small>Gross value earned</small><b id="ge">–</b></div>
+<div class="box"><small>Due this application (after retention)</small><b id="due">–</b></div>
+</div>
+<table><tbody id="val"></tbody></table>
+<div id="msg"></div>
+<div style="margin-top:12px"><button onclick="copySum()">Copy summary</button> <button class="sec" onclick="print()">Print / save PDF</button> <span id="cp" class="note"></span></div>
+</div>
+
+<div class="cta"><h2>Want your application checked before it goes in?</h2>
+<p style="opacity:.85;margin:0 0 6px">I'm Arbab Ali Thebo, a Senior QS with 17+ years' experience. I prepare and check payment applications, variation accounts and takeoffs for UK subcontractors, remotely. Your first check is free.</p>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSee8oksDbECgx2yQFMiluKVhWIVnfFZbQZdYuIst71AYxy5xw/viewform" target="_blank" rel="noopener">Get a free first check</a>
+<a class="s" href="https://wa.me/923445612046?text=Hi%20Arbab%2C%20I%20used%20your%20MEP%20progress%20tracker" target="_blank" rel="noopener">WhatsApp</a>
+<a class="s" href="https://www.linkedin.com/in/arbabalithebo/" target="_blank" rel="noopener">LinkedIn</a></div>
+</main>
+<footer>Built by Arbab Ali Thebo, Senior Quantity Surveyor · arbabalithebo92@gmail.com · <a href="https://arbabalithebo92-web.github.io/">More free tools</a> · <a href="contractor-payment-checker.html">Who pays subbies on time?</a><br>A guide for planning and valuation only. Your subcontract terms decide what is payable.</footer>
+<script>
+const $=id=>document.getElementById(id),v=id=>parseFloat($(id).value)||0;
+const f=n=>'£'+Math.round(n).toLocaleString('en-GB'),p=n=>(Math.round(n*10)/10)+'%';
+let R=[];const KEY='mep-tracker-v1';
+function save(){try{localStorage.setItem(KEY,JSON.stringify({R,w:[v('w1'),v('w2'),v('w3'),v('ret'),v('prev')]}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.R&&d.R.length){R=d.R;['w1','w2','w3','ret','prev'].forEach((k,i)=>$(k).value=d.w[i]);return true}}catch(e){}return false}
+function sample(){R=[['Electrical – Levels 1-5 containment & wiring',148000,90,60,10],['Electrical – Plant room & switchgear',62000,40,10,0],['HVAC – Ductwork & FCUs, Levels 1-5',186000,85,55,5],['HVAC – AHUs & chillers (roof)',124000,20,0,0],['Plumbing & drainage – risers & floors',96000,95,70,20],['Fire alarm & sprinklers',71000,80,40,0],['BMS & controls',38000,30,0,0]];draw();}
+function addRow(){R.push(['New package',0,0,0,0]);draw();}
+function clearAll(){R=[];draw();}
+function draw(){
+ $('tb').innerHTML=R.map((r,i)=>'<tr><td><input class="nm" value="'+String(r[0]).replace(/"/g,'&quot;')+'" data-i="'+i+'" data-k="0"></td>'+[1,2,3,4].map(k=>'<td><input type="number" value="'+r[k]+'" data-i="'+i+'" data-k="'+k+'"'+(k>1?' min="0" max="100"':' step="1000"')+'></td>').join('')+'<td><div class="bar"><i id="b'+i+'"></i></div></td><td class="n" id="e'+i+'"></td><td><button class="x" onclick="R.splice('+i+',1);draw()">✕</button></td></tr>').join('');
+ document.querySelectorAll('#tb input').forEach(el=>el.oninput=()=>{const i=+el.dataset.i,k=+el.dataset.k;R[i][k]=k?parseFloat(el.value)||0:el.value;calc()});
+ calc();}
+function calc(){
+ const w=[v('w1'),v('w2'),v('w3')],ws=w[0]+w[1]+w[2]||1;
+ $('wnote').innerHTML=Math.round(ws)==100?'Weightings add up to 100%.':'<span style="color:#b42318">Weightings add up to '+ws+'%. They will be scaled to 100%.</span>';
+ let tv=0,te=0,sp=0;
+ R.forEach((r,i)=>{const pr=(w[0]*Math.min(r[2],100)+w[1]*Math.min(r[3],100)+w[2]*Math.min(r[4],100))/ws;const e=r[1]*pr/100;tv+=r[1];te+=e;sp+=pr;
+  const b=$('b'+i);if(b)b.style.width=Math.min(pr,100)+'%';const c=$('e'+i);if(c)c.textContent=f(e)+' ('+p(pr)+')';});
+ const wp=tv?te/tv*100:0,sa=R.length?sp/R.length:0,ret=te*v('ret')/100,net=te-ret,due=net-(v('prev')*(1-v('ret')/100));
+ $('wp').textContent=p(wp);$('sa').textContent=p(sa);$('ge').textContent=f(te);$('due').textContent=f(due);
+ $('val').innerHTML='<tr><td>Total package value</td><td class="n">'+f(tv)+'</td></tr><tr><td>Gross value of work done</td><td class="n">'+f(te)+'</td></tr><tr><td>Less retention ('+v('ret')+'%)</td><td class="n">−'+f(ret)+'</td></tr><tr><td>Net valuation</td><td class="n">'+f(net)+'</td></tr><tr><td>Less previously certified (net of retention)</td><td class="n">−'+f(v('prev')*(1-v('ret')/100))+'</td></tr><tr><td><b>Amount due this application</b></td><td class="n"><b>'+f(due)+'</b></td></tr>';
+ const gap=sa-wp;
+ $('msg').innerHTML=!R.length?'':Math.abs(gap)<2?'<div class="ok">The simple average and the weighted figure are close on this job.</div>':'<div class="warn">The simple average says <b>'+p(sa)+'</b>, but by value you are at <b>'+p(wp)+'</b>. That '+p(Math.abs(gap))+' gap is worth about <b>'+f(Math.abs(gap)/100*tv)+'</b>. '+(gap>0?'Report on the average and your application will look inflated next to the QS\'s valuation.':'Report on the average and you are under-claiming.')+'</div>';
+ window._S='MEP progress summary\nWeighted progress: '+p(wp)+' (simple average '+p(sa)+')\nGross earned: '+f(te)+' of '+f(tv)+'\nDue this application: '+f(due)+'\nTool: https://arbabalithebo92-web.github.io/mep-progress-valuation.html';
+ save();}
+function copySum(){navigator.clipboard.writeText(window._S||'').then(()=>{$('cp').textContent='Copied';setTimeout(()=>$('cp').textContent='',2000)})}
+['w1','w2','w3','ret','prev'].forEach(k=>$(k).oninput=calc);
+if(!load())sample();else draw();
+</script></body></html>
