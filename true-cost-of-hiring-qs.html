@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>True Cost of Hiring a Quantity Surveyor (UK 2026/27) – Free Calculator</title>
+<meta name="description" content="Free UK calculator: the real annual cost of employing a Quantity Surveyor – salary, employer NI at 15%, pension, car allowance, recruitment fee and overheads – compared with outsourced takeoff support. By Arbab Ali Thebo, Senior QS.">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Arial,sans-serif;background:#f4f6fa;color:#1d2433}
+header{background:#0f1f3a;color:#fff;padding:22px 5%}header h1{margin:0;font-size:clamp(22px,4vw,32px)}header h1 b{color:#ff7a1a}
+header p{margin:8px 0 0;opacity:.85;max-width:780px}
+main{padding:20px 5%;max-width:1150px;margin:auto}
+.card{background:#fff;border:1px solid #e3e7ef;border-radius:10px;padding:18px;margin-bottom:18px}
+h2{font-size:19px;margin:0 0 12px}h2 span{color:#ff7a1a}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+label{font-size:12px;color:#556;display:block;margin-bottom:3px}
+input,select{width:100%;padding:9px;border:1px solid #cfd6e3;border-radius:6px;font:inherit;font-size:14px}
+.hint{font-size:11px;color:#778;margin-top:3px}
+button{background:#ff7a1a;color:#fff;border:0;padding:10px 16px;border-radius:6px;font-weight:700;cursor:pointer;font-size:14px}
+button.sec{background:#0f1f3a}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:8px 6px;border-bottom:1px solid #eef1f6;text-align:left}
+th{background:#f4f6fa;font-size:12px}td.n{text-align:right;white-space:nowrap}tr.tot td{font-weight:800;border-top:2px solid #0f1f3a}
+.fa{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:14px}
+.box{background:#0f1f3a;color:#fff;border-radius:8px;padding:14px}.box small{opacity:.75;display:block}.box b{font-size:24px;color:#ff7a1a}
+.bar{height:26px;border-radius:5px;background:#0f1f3a;margin:4px 0 10px;min-width:2px;transition:width .3s}
+.bar.o{background:#ff7a1a}
+.ok{background:#f0faf3;border-left:4px solid #1e7d32;padding:10px 12px;border-radius:6px;margin-top:10px;font-size:14px}
+.note{font-size:12px;color:#667;line-height:1.5}
+.cta{background:#0f1f3a;color:#fff;border-radius:10px;padding:20px}.cta h2{color:#fff}
+.cta a{display:inline-block;margin:6px 8px 0 0;padding:10px 14px;border-radius:6px;background:#ff7a1a;color:#fff;text-decoration:none;font-weight:700}
+.cta a.s{background:#fff;color:#0f1f3a}
+footer{text-align:center;padding:18px;font-size:12px;color:#778}
+@media print{.cta,button,footer a{display:none}body{background:#fff}}
+</style></head><body>
+<header>
+<h1>True Cost of Hiring a <b>Quantity Surveyor</b></h1>
+<p>A £60k salary doesn't cost you £60k. Add employer NI, pension, car allowance, the agency fee and kit, and see what one QS really costs per year and per productive day. Then compare it with paying for takeoff support only when tenders land.</p>
+</header>
+<main>
+
+<div class="card">
+<h2>1. The <span>hire</span></h2>
+<div class="grid">
+ <div><label>Region (fills a typical salary)</label>
+ <select id="reg">
+  <option value="">— choose —</option>
+  <option value="75000">London</option><option value="69000">South East</option>
+  <option value="64000">East of England</option><option value="63000">South West</option>
+  <option value="62000">West Midlands</option><option value="62000">East Midlands</option>
+  <option value="65000">North West</option><option value="60000">Yorkshire &amp; Humber</option>
+  <option value="57000">North East</option><option value="57000">Wales</option>
+  <option value="61000">Scotland</option><option value="52000">Northern Ireland</option>
+ </select><div class="hint">Indicative Senior QS mid-points. Type your own figure below.</div></div>
+ <div><label>Base salary (£/yr)</label><input id="sal" type="number" value="60000" step="1000"></div>
+ <div><label>Car / travel allowance (£/yr)</label><input id="car" type="number" value="5500" step="250"></div>
+ <div><label>Employer pension (% of salary)</label><input id="pen" type="number" value="5" step="0.5"><div class="hint">Legal minimum is 3% of qualifying earnings</div></div>
+ <div><label>Bonus (% of salary)</label><input id="bon" type="number" value="0" step="1"></div>
+ <div><label>Recruitment fee (% of salary)</label><input id="rec" type="number" value="18" step="1"><div class="hint">Agencies typically charge 15–25%</div></div>
+ <div><label>Years you expect them to stay</label><input id="yrs" type="number" value="2" step="0.5" min="0.5"><div class="hint">Fee is spread over this period</div></div>
+ <div><label>Software, laptop, phone, CPD (£/yr)</label><input id="kit" type="number" value="3000" step="250"><div class="hint">e.g. takeoff software licence, RICS fees</div></div>
+ <div><label>Desk / office share (£/yr)</label><input id="ofc" type="number" value="0" step="500"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>2. <span>Productive</span> time</h2>
+<div class="grid">
+ <div><label>Working days in year</label><input id="wd" type="number" value="252"></div>
+ <div><label>Holiday incl. bank holidays (days)</label><input id="hol" type="number" value="28"><div class="hint">Statutory minimum is 28</div></div>
+ <div><label>Sickness, training, admin (days)</label><input id="sick" type="number" value="10"></div>
+ <div><label>Hours per day</label><input id="hpd" type="number" value="7.5" step="0.5"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>3. The real <span>cost</span></h2>
+<div class="fa">
+ <div class="box"><small>Total cost per year</small><b id="tot">–</b></div>
+ <div class="box"><small>Multiple of base salary</small><b id="mul">–</b></div>
+ <div class="box"><small>Cost per productive day</small><b id="pday">–</b></div>
+ <div class="box"><small>Cost per productive hour</small><b id="phr">–</b></div>
+</div>
+<table><thead><tr><th>Item</th><th class="n">£ per year</th></tr></thead><tbody id="tb"></tbody></table>
+<p class="note">Employer NI: 15% on pay above the £5,000 secondary threshold (2026/27). Applied to salary, bonus and cash car allowance. Employment Allowance is not deducted, because most firms have already used it on existing staff.</p>
+</div>
+
+<div class="card">
+<h2>4. Compare: <span>outsourced takeoff support</span></h2>
+<p class="note" style="margin-top:0">Many contractors only need extra QS capacity when tenders pile up. Enter the work you actually expect to send out.</p>
+<div class="grid">
+ <div><label>Takeoffs / estimates per month</label><input id="jobs" type="number" value="4"></div>
+ <div><label>Average hours per takeoff</label><input id="jh" type="number" value="12"></div>
+ <div><label>Outsourced rate (£/hour)</label><input id="rate" type="number" value="25"></div>
+</div>
+<div style="margin-top:16px">
+ <div class="note">Employing a QS</div><div class="bar" id="b1"></div>
+ <div class="note">Outsourced support</div><div class="bar o" id="b2"></div>
+</div>
+<div class="ok" id="res"></div>
+<div style="margin-top:14px"><button onclick="copySum()">Copy summary</button> <button class="sec" onclick="print()">Print / save PDF</button> <span id="cp" class="note"></span></div>
+</div>
+
+<div class="cta">
+<h2>Tenders piling up? Try a takeoff on me</h2>
+<p style="opacity:.85;margin:0 0 6px">I'm Arbab Ali Thebo, a Senior QS with 17+ years' experience. I do remote takeoffs, BOQs and estimates for UK contractors and subcontractors. Your first takeoff is free, so you can check the quality before you pay anything.</p>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSee8oksDbECgx2yQFMiluKVhWIVnfFZbQZdYuIst71AYxy5xw/viewform" target="_blank" rel="noopener">Get a free first takeoff</a>
+<a class="s" href="https://wa.me/923445612046?text=Hi%20Arbab%2C%20I%20used%20your%20QS%20cost%20calculator" target="_blank" rel="noopener">WhatsApp</a>
+<a class="s" href="https://www.linkedin.com/in/arbabalithebo/" target="_blank" rel="noopener">LinkedIn</a>
+</div>
+</main>
+<footer>Built by Arbab Ali Thebo, Senior Quantity Surveyor · arbabalithebo92@gmail.com · <a href="https://arbabalithebo92-web.github.io/">More free tools</a><br>Indicative figures for budgeting only, not tax or payroll advice.</footer>
+<script>
+const $=id=>document.getElementById(id),v=id=>parseFloat($(id).value)||0;
+const f=n=>'£'+Math.round(n).toLocaleString('en-GB');
+let S='';
+function calc(){
+ const sal=v('sal'),car=v('car'),bon=sal*v('bon')/100,pen=sal*v('pen')/100;
+ const ni=Math.max(0,sal+bon+car-5000)*0.15;
+ const rec=sal*v('rec')/100/Math.max(0.5,v('yrs'));
+ const kit=v('kit'),ofc=v('ofc');
+ const rows=[['Base salary',sal],['Bonus',bon],['Car / travel allowance',car],['Employer NI (15%)',ni],['Employer pension',pen],['Recruitment fee (spread over '+v('yrs')+' yrs)',rec],['Software, kit & CPD',kit],['Office / desk',ofc]];
+ const tot=rows.reduce((a,r)=>a+r[1],0);
+ const days=Math.max(1,v('wd')-v('hol')-v('sick')),hrs=days*v('hpd');
+ $('tb').innerHTML=rows.filter(r=>r[1]>0).map(r=>`<tr><td>${r[0]}</td><td class="n">${f(r[1])}</td></tr>`).join('')+`<tr class="tot"><td>Total cost to the business</td><td class="n">${f(tot)}</td></tr>`;
+ $('tot').textContent=f(tot);$('mul').textContent=sal?(tot/sal).toFixed(2)+'×':'–';
+ $('pday').textContent=f(tot/days);$('phr').textContent=f(tot/hrs);
+ const oh=v('jobs')*v('jh')*12,out=oh*v('rate');
+ const mx=Math.max(tot,out,1);$('b1').style.width=(tot/mx*100)+'%';$('b2').style.width=(out/mx*100)+'%';
+ const be=v('rate')?tot/v('rate')/12:0;
+ $('res').innerHTML=`Outsourcing <b>${Math.round(oh)} hours a year</b> costs about <b>${f(out)}</b>, against <b>${f(tot)}</b> for a full-time hire. That's <b>${f(Math.max(0,tot-out))}</b> a year less, and you only pay when there's work.<br><span class="note">Break-even: you'd need to send out about ${Math.round(be)} hours a month before employing becomes cheaper.</span>`;
+ S=`True cost of hiring a QS\nBase salary: ${f(sal)}\nTotal cost to business: ${f(tot)} (${(tot/sal).toFixed(2)}x base)\nPer productive day: ${f(tot/days)} | per hour: ${f(tot/hrs)}\nOutsourced (${Math.round(oh)} hrs/yr): ${f(out)}\nCalculator: https://arbabalithebo92-web.github.io/true-cost-of-hiring-qs.html`;
+}
+function copySum(){navigator.clipboard.writeText(S).then(()=>{$('cp').textContent='Copied';setTimeout(()=>$('cp').textContent='',2000)})}
+$('reg').addEventListener('change',e=>{if(e.target.value){$('sal').value=e.target.value;calc()}});
+document.querySelectorAll('input').forEach(i=>i.addEventListener('input',calc));calc();
+</script></body></html>
