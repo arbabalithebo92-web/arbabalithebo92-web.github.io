@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free CIS Invoice Maker with Reverse Charge VAT – UK Subcontractors</title>
+<meta name="description" content="Free CIS invoice template for UK subcontractors. Works out the CIS deduction (20%, 30% or gross), the domestic reverse charge VAT wording and the amount payable, then saves it as a PDF. No sign-up.">
+<link rel="canonical" href="https://arbabalithebo92-web.github.io/cis-invoice-maker.html">
+<style>
+:root{--navy:#0d1b33;--navy2:#16294a;--orange:#f28c28;--ink:#1d2433;--muted:#5b6578;--bg:#f4f6fa;--line:#d4dae6}
+*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+header{background:var(--navy);color:#fff;padding:28px 18px 34px}
+.wrap{max-width:900px;margin:0 auto}
+header small{color:var(--orange);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:12px}
+h1{margin:6px 0 8px;font-size:clamp(24px,4.5vw,36px);line-height:1.15}
+header p{margin:0;color:#c9d3e6;max-width:660px}
+main{padding:0 14px}
+.card{background:#fff;border-radius:14px;box-shadow:0 4px 18px rgba(13,27,51,.08);padding:22px;margin:-18px 0 18px}
+.card+.card{margin-top:0}
+h2{font-size:20px;margin:0 0 12px;color:var(--navy)}
+h3{font-size:15px;margin:16px 0 8px;color:var(--navy)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+label{display:block;font-weight:600;font-size:13px;margin-bottom:4px}
+label span{font-weight:400;color:var(--muted);font-size:12px}
+input,select,textarea{width:100%;padding:10px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:15px;background:#fff;font-family:inherit}
+textarea{min-height:62px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--orange)}
+button{background:var(--orange);color:#fff;border:0;border-radius:9px;padding:12px 18px;font-size:15px;font-weight:700;cursor:pointer;margin:12px 8px 0 0}
+button.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+table.items{width:100%;border-collapse:collapse;margin-top:6px}
+table.items th{font-size:12px;text-align:left;color:var(--muted);padding:4px}
+table.items td{padding:4px;vertical-align:top}
+table.items td.x{width:36px}
+.rm{background:#fde8e6;color:#c0392b;margin:0;padding:8px 11px}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+.box{background:var(--bg);border-radius:10px;padding:10px 12px}
+.box b{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.box span{font-size:20px;font-weight:800;color:var(--navy)}
+.box.hl{background:#fff4e6}.box.hl span{color:var(--orange)}
+.note{background:#fff7ec;border-left:4px solid var(--orange);padding:11px 14px;border-radius:8px;font-size:14px;margin-top:12px}
+ul.check{padding-left:0;list-style:none;margin:0}
+ul.check li{padding:6px 0 6px 28px;position:relative}
+ul.check li:before{content:"✓";position:absolute;left:4px;color:var(--orange);font-weight:800}
+.cta{background:var(--navy);color:#fff;border-radius:14px;padding:22px;margin-bottom:18px}
+.cta h2{color:#fff}.cta p{color:#c9d3e6;margin:0 0 14px}
+.btns a{display:inline-block;text-decoration:none;font-weight:700;border-radius:9px;padding:12px 18px;margin:4px 8px 4px 0}
+.wa{background:#25d366;color:#fff}.em{background:var(--orange);color:#fff}
+.small{font-size:12px;color:var(--muted)}
+footer{text-align:center;padding:16px 16px 30px;font-size:13px;color:var(--muted)}
+footer a{color:var(--navy)}
+/* invoice preview */
+#inv{background:#fff;border:1px solid var(--line);border-radius:10px;padding:30px;font-size:13.5px;color:#111}
+#inv .top{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-bottom:3px solid var(--navy);padding-bottom:14px}
+#inv .title{font-size:26px;font-weight:800;color:var(--navy);letter-spacing:.04em}
+#inv .meta td{padding:1px 8px 1px 0}
+#inv .two{display:flex;gap:30px;flex-wrap:wrap;margin:16px 0}
+#inv .two div{flex:1;min-width:200px}
+#inv .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#666;font-weight:700}
+#inv table.lines{width:100%;border-collapse:collapse;margin-top:6px}
+#inv table.lines th{background:var(--navy);color:#fff;text-align:left;padding:7px;font-size:12px}
+#inv table.lines td{border-bottom:1px solid #e3e7ef;padding:7px}
+#inv .r,#inv table.lines th.r{text-align:right;white-space:nowrap}
+#inv table.tot{margin-left:auto;margin-top:12px;border-collapse:collapse;min-width:290px}
+#inv table.tot td{padding:5px 8px}
+#inv table.tot tr.pay td{font-weight:800;font-size:15px;border-top:2px solid var(--navy);color:var(--navy)}
+#inv .drc{margin-top:14px;padding:10px 12px;border:1.5px solid var(--navy);border-radius:6px;font-weight:700}
+#inv .foot{margin-top:18px;font-size:12px;color:#333}
+#inv .made{margin-top:20px;font-size:10px;color:#999;text-align:center}
+@media print{
+ body{background:#fff}
+ header,main>*:not(#preview),footer{display:none!important}
+ #preview{box-shadow:none;margin:0;padding:0}
+ #preview>h2,#preview>.noprint{display:none}
+ #inv{border:0;padding:0}
+ @page{margin:14mm}
+}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<small>Free tool for UK subcontractors</small>
+<h1>CIS Invoice Maker with Reverse Charge VAT</h1>
+<p>Fill in your details and the work done. The tool works out the CIS deduction, the reverse charge VAT wording and the amount payable, then saves a clean invoice as a PDF. Free, no sign-up, nothing is sent anywhere.</p>
+</div></header>
+
+<main class="wrap">
+
+<section class="card">
+<h2>1. Your business</h2>
+<div class="grid">
+ <div><label>Business / trading name</label><input id="fName" placeholder="Example Drylining Ltd"></div>
+ <div><label>Address</label><textarea id="fAddr" placeholder="1 Sample Street, Cardiff, CF10 1AA"></textarea></div>
+ <div><label>UTR <span>(Unique Taxpayer Reference)</span></label><input id="fUtr" placeholder="12345 67890"></div>
+ <div><label>Company number <span>(if Ltd)</span></label><input id="fCo" placeholder="01234567"></div>
+ <div><label>CIS status</label><select id="cis">
+  <option value="20">Registered – 20% deduction</option>
+  <option value="30">Not registered – 30% deduction</option>
+  <option value="0">Gross payment status – 0%</option></select></div>
+ <div><label>VAT registered?</label><select id="vatReg">
+  <option value="no">No</option><option value="yes">Yes</option></select></div>
+ <div class="vatOnly"><label>VAT number</label><input id="fVat" placeholder="GB123456789"></div>
+ <div class="vatOnly"><label>VAT rate</label><select id="vatRate"><option value="20">20% (standard)</option><option value="5">5% (reduced)</option></select></div>
+ <div class="vatOnly"><label>Domestic reverse charge applies?</label><select id="drc">
+  <option value="yes">Yes – customer is a VAT &amp; CIS registered contractor</option>
+  <option value="no">No – customer is an end user / intermediary</option></select></div>
+</div>
+</section>
+
+<section class="card">
+<h2>2. Customer &amp; invoice</h2>
+<div class="grid">
+ <div><label>Main contractor / customer</label><input id="cName" placeholder="Sample Construction Ltd"></div>
+ <div><label>Customer address</label><textarea id="cAddr" placeholder="Unit 2, Example Park, Bristol, BS1 2AB"></textarea></div>
+ <div><label>Invoice number</label><input id="iNo" placeholder="INV-001"></div>
+ <div><label>Invoice date</label><input id="iDate" type="date"></div>
+ <div><label>Project / site</label><input id="iSite" placeholder="Block A, Sample Road"></div>
+ <div><label>Their PO / application ref <span>(optional)</span></label><input id="iPo" placeholder="PO 4567 / Application 3"></div>
+ <div><label>Payment terms</label><input id="iTerms" placeholder="30 days from invoice date"></div>
+</div>
+</section>
+
+<section class="card">
+<h2>3. Work done</h2>
+<p class="small">CIS is deducted from labour only. Put the cost of materials you bought separately, so tax isn't deducted from them.</p>
+<table class="items"><thead><tr><th>Description</th><th style="width:120px">Labour £</th><th style="width:120px">Materials £</th><th></th></tr></thead>
+<tbody id="rows"></tbody></table>
+<button class="ghost" type="button" onclick="addRow()">+ Add line</button>
+<div class="sum" id="sum"></div>
+</section>
+
+<section class="card">
+<h2>4. Bank details <span class="small">(optional, printed on the invoice)</span></h2>
+<div class="grid">
+ <div><label>Account name</label><input id="bName" placeholder="Example Drylining Ltd"></div>
+ <div><label>Sort code</label><input id="bSort" placeholder="00-00-00"></div>
+ <div><label>Account number</label><input id="bAcc" placeholder="00000000"></div>
+</div>
+<p class="small">Your details are saved only in this browser, so next month's invoice is quicker. Use "Clear my details" on a shared computer.</p>
+</section>
+
+<section class="card" id="preview">
+<h2>5. Your invoice</h2>
+<div id="inv"></div>
+<div class="noprint">
+<button type="button" onclick="window.print()">Save as PDF / Print</button>
+<button type="button" class="ghost" onclick="clearAll()">Clear my details</button>
+<label style="font-weight:400;margin-top:10px"><input type="checkbox" id="madeBy" checked style="width:auto"> Show a small "made with" line at the bottom</label>
+</div>
+</section>
+
+<section class="cta">
+<h2>Applications rejected or paid late?</h2>
+<p>I'm Arbab, a remote QS with 17+ years' experience. I prepare monthly applications, variation accounts and takeoffs for UK subcontractors, at a fixed price per job. Send me your next application and I'll check it free.</p>
+<div class="btns">
+<a class="wa" href="https://wa.me/923445612046?text=Hi%20Arbab%2C%20I%20used%20your%20CIS%20invoice%20maker.%20I%20need%20help%20with%20applications%20%2F%20takeoffs." target="_blank" rel="noopener">WhatsApp me</a>
+<a class="em" href="mailto:arbabalithebo92@gmail.com?subject=CIS%20invoice%20maker%20-%20help%20with%20applications">Email me</a>
+</div>
+<p class="small" style="color:#9fb0cc;margin-top:10px">Also free: <a style="color:#fff" href="https://arbabalithebo92-web.github.io/payment-notice-calculator.html">Payment Notice Deadline Calculator</a></p>
+</section>
+
+<section class="card">
+<h2>Quick rules this tool follows</h2>
+<ul class="check">
+<li><b>CIS rate:</b> 20% if you're registered for CIS, 30% if you're not, 0% with gross payment status. The contractor deducts it and pays it to HMRC for you.</li>
+<li><b>CIS applies to labour only</b>, not to materials you bought for the job, and not to VAT.</li>
+<li><b>Domestic reverse charge:</b> if you're VAT registered and your customer is a VAT and CIS registered contractor (not the end user), you don't charge VAT. The invoice shows the VAT amount and says the customer must pay it to HMRC.</li>
+<li><b>End user or intermediary:</b> if the customer has told you in writing they are an end user, charge VAT as normal.</li>
+<li>Your UTR goes on the invoice so the contractor can verify you with HMRC.</li>
+</ul>
+<p class="small">General guidance only, not tax advice. Check HMRC guidance or your accountant if you're not sure which rules apply to a job.</p>
+</section>
+</main>
+
+<footer>More free tools: <a href="https://arbabalithebo92-web.github.io/">arbabalithebo92-web.github.io</a></footer>
+
+<script>
+const F=['fName','fAddr','fUtr','fCo','cis','vatReg','fVat','vatRate','drc','cName','cAddr','iNo','iDate','iSite','iPo','iTerms','bName','bSort','bAcc'];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const gbp=n=>'£'+(Math.round(n*100)/100).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+const num=v=>{const n=parseFloat(String(v).replace(/[£,]/g,''));return isNaN(n)?0:n};
+
+function addRow(d='',l='',m=''){
+ const tr=document.createElement('tr');
+ tr.innerHTML='<td><input class="d" placeholder="e.g. Drylining to level 2 – Application 3"></td><td><input class="l" inputmode="decimal" placeholder="0.00"></td><td><input class="m" inputmode="decimal" placeholder="0.00"></td><td class="x"><button type="button" class="rm" title="Remove">×</button></td>';
+ tr.querySelector('.d').value=d;tr.querySelector('.l').value=l;tr.querySelector('.m').value=m;
+ tr.querySelector('.rm').onclick=()=>{tr.remove();render()};
+ tr.querySelectorAll('input').forEach(i=>i.addEventListener('input',render));
+ $('rows').appendChild(tr);
+}
+
+function data(){
+ const o={};F.forEach(k=>o[k]=$(k).value);
+ o.rows=[...$('rows').querySelectorAll('tr')].map(t=>({d:t.querySelector('.d').value,l:t.querySelector('.l').value,m:t.querySelector('.m').value}));
+ return o;
+}
+function save(){try{const o=data();delete o.iNo;delete o.iDate;delete o.rows;localStorage.setItem('cisInvoice',JSON.stringify(o))}catch(e){}}
+function load(){try{const o=JSON.parse(localStorage.getItem('cisInvoice')||'null');if(o)F.forEach(k=>{if(o[k]!=null&&k!=='iNo'&&k!=='iDate')$(k).value=o[k]})}catch(e){}}
+function clearAll(){try{localStorage.removeItem('cisInvoice')}catch(e){}F.forEach(k=>{const el=$(k);if(el.tagName==='SELECT')el.selectedIndex=0;else el.value=''});$('rows').innerHTML='';addRow();$('iDate').valueAsDate=new Date();render()}
+
+function render(){
+ const o=data();
+ const vat=o.vatReg==='yes', drc=vat&&o.drc==='yes';
+ document.querySelectorAll('.vatOnly').forEach(e=>e.style.display=vat?'':'none');
+ const rate=num(o.cis)/100, vr=num(o.vatRate)/100;
+ let lab=0,mat=0;o.rows.forEach(r=>{lab+=num(r.l);mat+=num(r.m)});
+ const net=lab+mat, vatAmt=vat?net*vr:0, cisAmt=lab*rate;
+ const vatCharged=vat&&!drc?vatAmt:0;
+ const pay=net+vatCharged-cisAmt;
+
+ $('sum').innerHTML=
+  '<div class="box"><b>Labour</b><span>'+gbp(lab)+'</span></div>'+
+  '<div class="box"><b>Materials</b><span>'+gbp(mat)+'</span></div>'+
+  '<div class="box"><b>CIS deduction ('+o.cis+'%)</b><span>−'+gbp(cisAmt)+'</span></div>'+
+  '<div class="box"><b>'+(drc?'VAT (reverse charge – not charged)':vat?'VAT charged':'VAT')+'</b><span>'+(vat?gbp(drc?0:vatAmt):'n/a')+'</span></div>'+
+  '<div class="box hl"><b>Amount payable to you</b><span>'+gbp(pay)+'</span></div>';
+
+ const d=o.iDate?new Date(o.iDate+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}):'';
+ const lines=o.rows.filter(r=>r.d||num(r.l)||num(r.m)).map(r=>'<tr><td>'+esc(r.d)+'</td><td class="r">'+gbp(num(r.l))+'</td><td class="r">'+gbp(num(r.m))+'</td><td class="r">'+gbp(num(r.l)+num(r.m))+'</td></tr>').join('')||'<tr><td colspan="4" style="color:#999">Add your work lines above</td></tr>';
+ let tot='<tr><td>Labour</td><td class="r">'+gbp(lab)+'</td></tr><tr><td>Materials</td><td class="r">'+gbp(mat)+'</td></tr><tr><td><b>Net total</b></td><td class="r"><b>'+gbp(net)+'</b></td></tr>';
+ if(vat&&drc) tot+='<tr><td>VAT @ '+o.vatRate+'% – reverse charge</td><td class="r">'+gbp(0)+'</td></tr>';
+ else if(vat) tot+='<tr><td>VAT @ '+o.vatRate+'%</td><td class="r">'+gbp(vatAmt)+'</td></tr>';
+ tot+='<tr><td>Less CIS deduction @ '+o.cis+'% of labour</td><td class="r">−'+gbp(cisAmt)+'</td></tr>';
+ tot+='<tr class="pay"><td>Amount payable</td><td class="r">'+gbp(pay)+'</td></tr>';
+ const bank=(o.bName||o.bSort||o.bAcc)?'<div class="foot"><div class="lbl">Pay by bank transfer</div>'+esc(o.bName)+(o.bSort?' · Sort code '+esc(o.bSort):'')+(o.bAcc?' · Account '+esc(o.bAcc):'')+'</div>':'';
+
+ $('inv').innerHTML=
+ '<div class="top"><div><div style="font-size:18px;font-weight:800;color:#0d1b33">'+(esc(o.fName)||'Your business name')+'</div><div style="white-space:pre-line">'+esc(o.fAddr)+'</div>'+
+  (o.fUtr?'<div>UTR: '+esc(o.fUtr)+'</div>':'')+(o.fCo?'<div>Company no: '+esc(o.fCo)+'</div>':'')+(vat&&o.fVat?'<div>VAT no: '+esc(o.fVat)+'</div>':'')+'</div>'+
+  '<div style="text-align:right"><div class="title">'+(vat?'VAT INVOICE':'INVOICE')+'</div><table class="meta" style="margin-left:auto"><tr><td>Invoice no:</td><td><b>'+(esc(o.iNo)||'—')+'</b></td></tr><tr><td>Date:</td><td>'+(d||'—')+'</td></tr>'+(o.iPo?'<tr><td>Ref:</td><td>'+esc(o.iPo)+'</td></tr>':'')+'</table></div></div>'+
+ '<div class="two"><div><div class="lbl">Bill to</div><b>'+(esc(o.cName)||'Customer name')+'</b><div style="white-space:pre-line">'+esc(o.cAddr)+'</div></div><div><div class="lbl">Project / site</div>'+(esc(o.iSite)||'—')+(o.iTerms?'<div class="lbl" style="margin-top:8px">Payment terms</div>'+esc(o.iTerms):'')+'</div></div>'+
+ '<table class="lines"><thead><tr><th>Description</th><th class="r">Labour</th><th class="r">Materials</th><th class="r">Total</th></tr></thead><tbody>'+lines+'</tbody></table>'+
+ '<table class="tot">'+tot+'</table>'+
+ (drc?'<div class="drc">Reverse charge: customer to pay the VAT to HMRC. VAT amount '+gbp(vatAmt)+' at '+o.vatRate+'% (Domestic reverse charge for building and construction services).</div>':'')+
+ '<div class="foot">CIS: '+(o.cis==='0'?'gross payment status – no deduction.':'deduction of '+o.cis+'% applies to labour only ('+gbp(cisAmt)+'), to be paid to HMRC by the contractor.')+'</div>'+bank+
+ ($('madeBy').checked?'<div class="made">Made with the free CIS Invoice Maker · arbabalithebo92-web.github.io</div>':'');
+ save();
+}
+
+$('iDate').valueAsDate=new Date();
+load();
+addRow();
+F.forEach(k=>{$(k).addEventListener('input',render);$(k).addEventListener('change',render)});
+$('madeBy').addEventListener('change',render);
+render();
+</script>
+</body>
+</html>
